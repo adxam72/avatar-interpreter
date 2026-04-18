@@ -35,6 +35,7 @@ const SAMPLE_TRANSCRIPT = [
 ];
 
 const ZehnTube = () => {
+  const { profile } = useAuth();
   const [videos, setVideos] = useState<VideoItem[]>(DEMO_VIDEOS);
   const [query, setQuery] = useState("");
   const [active, setActive] = useState<VideoItem | null>(null);
@@ -186,7 +187,7 @@ const ZehnTube = () => {
             {/* Avatar panel */}
             <div className="space-y-4">
               <div className="glass-card rounded-3xl overflow-hidden aspect-square sticky top-20">
-                <SignAvatar pose={player.currentPose} />
+                <SignAvatar pose={player.currentPose} avatarUrl={profile?.avatar_url || undefined} compact showControls />
                 <div className="absolute top-3 left-3 right-3 flex justify-between">
                   <div className="glass px-2.5 py-1 rounded-full text-xs font-medium">
                     {translating ? (
