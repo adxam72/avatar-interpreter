@@ -3,12 +3,14 @@ import { motion } from "framer-motion";
 import { Navbar } from "@/components/Navbar";
 import { SignAvatar } from "@/components/SignAvatar";
 import { useSignPlayer } from "@/hooks/useSignPlayer";
+import { useAuth } from "@/contexts/AuthContext";
 import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
 import { Slider } from "@/components/ui/slider";
+import { Switch } from "@/components/ui/switch";
 import {
   Play, Square, RotateCcw, Sparkles, Hand,
-  Camera, CameraOff, ArrowLeftRight, AlertCircle,
+  Camera, CameraOff, ArrowLeftRight, AlertCircle, Repeat,
 } from "lucide-react";
 import { KNOWN_WORDS } from "@/lib/signEngine";
 
@@ -29,8 +31,11 @@ const SUGGESTIONS = ["Salom", "Rahmat", "Men sevaman", "Bugun yaxshi", "Ona uy"]
 interface DetectedSign { text: string; timestamp: number; }
 
 const Dialog = () => {
+  const { profile } = useAuth();
+
   // ─── Studio (text → sign) ─────────────────────────────────
   const [text, setText] = useState("Salom");
+  const [autoLoop, setAutoLoop] = useState(false);
   const player = useSignPlayer();
 
   const handlePlay = () => {
