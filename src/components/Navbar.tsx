@@ -7,8 +7,7 @@ import logo from "@/assets/zehn-logo.png";
 import { cn } from "@/lib/utils";
 
 const navItems = [
-  { path: "/studio", label: "Studio" },
-  { path: "/recognize", label: "Aniqlash" },
+  { path: "/dialog", label: "Dialog" },
   { path: "/chat", label: "Muloqot" },
   { path: "/zehntube", label: "ZehnTube" },
 ];

@@ -12,16 +12,16 @@ import { useAuth } from "@/contexts/AuthContext";
 const features = [
   {
     icon: Hand,
-    title: "Studio",
-    desc: "Matn yozing — 3D avatar imo-ishorada tarjima qiladi.",
-    href: "/studio",
+    title: "Dialog",
+    desc: "Bir ekranda — siz ishora qiling, avatar ko'rsatsin. Ikki tomonlama tarjima.",
+    href: "/dialog",
     color: "from-blue-500 to-blue-600",
   },
   {
     icon: Camera,
-    title: "Aniqlash",
-    desc: "Kamera orqali imo-ishorangizni real vaqtda matnga aylantiramiz.",
-    href: "/recognize",
+    title: "Aniqlash AI",
+    desc: "MediaPipe 543 nuqta orqali imo-ishorangizni real vaqtda matnga aylantiradi.",
+    href: "/dialog",
     color: "from-cyan-500 to-blue-500",
   },
   {

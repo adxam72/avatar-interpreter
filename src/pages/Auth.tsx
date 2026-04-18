@@ -25,7 +25,7 @@ const Auth = () => {
   const [isDeaf, setIsDeaf] = useState(false);
 
   useEffect(() => {
-    if (user) navigate("/studio");
+    if (user) navigate("/dialog");
   }, [user, navigate]);
 
   const handleSubmit = async (e: React.FormEvent) => {
