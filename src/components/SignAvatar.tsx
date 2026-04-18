@@ -157,6 +157,8 @@ interface SignAvatarProps {
   showControls?: boolean;
   /** Compact variant — smaller, centered, no zoom; good for sidebars / split views. */
   compact?: boolean;
+  /** Custom Ready Player Me .glb URL. Falls back to the default avatar. */
+  avatarUrl?: string;
 }
 
 export const SignAvatar = ({
@@ -164,7 +166,9 @@ export const SignAvatar = ({
   className = "",
   showControls = false,
   compact = false,
+  avatarUrl,
 }: SignAvatarProps) => {
+  const url = avatarUrl?.trim() || DEFAULT_AVATAR_URL;
   return (
     <div className={`w-full h-full ${className}`}>
       <Canvas
@@ -186,7 +190,7 @@ export const SignAvatar = ({
         <directionalLight position={[-3, 2, -2]} intensity={0.3} color="#3b82f6" />
 
         <Suspense fallback={<Loader />}>
-          <ReadyPlayerMeAvatar pose={pose} />
+          <ReadyPlayerMeAvatar pose={pose} url={url} />
         </Suspense>
 
         <ContactShadows position={[0, -1.35, 0]} opacity={0.35} scale={3} blur={2.4} />
