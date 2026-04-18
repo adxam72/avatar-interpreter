@@ -201,7 +201,216 @@ const WORD_DICTIONARY: Record<string, HandPose[]> = {
       duration: 500,
     },
   ],
+  // ─── Kengaytirilgan lug'at ───
+  kun: [
+    { leftArm: { shoulder: 0, elbow: 0, wrist: 0, rotation: 0 },
+      rightArm: { shoulder: 1.4, elbow: 0.3, wrist: 0, rotation: 0 },
+      leftHand: "open", rightHand: "C", duration: 700 },
+  ],
+  tun: [
+    { leftArm: { shoulder: 0.6, elbow: 1.5, wrist: 0, rotation: 0 },
+      rightArm: { shoulder: 0.6, elbow: 1.5, wrist: 0, rotation: 0 },
+      leftHand: "flat", rightHand: "flat", duration: 700 },
+  ],
+  bola: [
+    { leftArm: { shoulder: 0, elbow: 0, wrist: 0, rotation: 0 },
+      rightArm: { shoulder: 0.5, elbow: 1.2, wrist: -0.3, rotation: 0 },
+      leftHand: "open", rightHand: "flat", duration: 600 },
+  ],
+  suv: [
+    { leftArm: { shoulder: 0, elbow: 0, wrist: 0, rotation: 0 },
+      rightArm: { shoulder: 0.7, elbow: 1.6, wrist: 0, rotation: 0 },
+      leftHand: "open", rightHand: "peace", duration: 500 },
+    { leftArm: { shoulder: 0, elbow: 0, wrist: 0, rotation: 0 },
+      rightArm: { shoulder: 0.9, elbow: 1.4, wrist: 0, rotation: 0 },
+      leftHand: "open", rightHand: "peace", duration: 500 },
+  ],
+  non: [
+    { leftArm: { shoulder: 0.6, elbow: 1.4, wrist: 0, rotation: 0 },
+      rightArm: { shoulder: 0.6, elbow: 1.6, wrist: 0, rotation: 0 },
+      leftHand: "flat", rightHand: "flat", duration: 700 },
+  ],
+  maktab: [
+    { leftArm: { shoulder: 0.5, elbow: 1.5, wrist: 0, rotation: 0 },
+      rightArm: { shoulder: 0.5, elbow: 1.7, wrist: 0, rotation: 0 },
+      leftHand: "flat", rightHand: "flat", duration: 500 },
+    { leftArm: { shoulder: 0.5, elbow: 1.5, wrist: 0, rotation: 0 },
+      rightArm: { shoulder: 0.5, elbow: 1.5, wrist: 0, rotation: 0 },
+      leftHand: "flat", rightHand: "flat", duration: 500 },
+  ],
+  kitob: [
+    { leftArm: { shoulder: 0.5, elbow: 1.5, wrist: 0, rotation: 0 },
+      rightArm: { shoulder: 0.5, elbow: 1.5, wrist: 0, rotation: 0 },
+      leftHand: "flat", rightHand: "flat", duration: 600 },
+    { leftArm: { shoulder: 0.5, elbow: 1.5, wrist: 0.4, rotation: 0 },
+      rightArm: { shoulder: 0.5, elbow: 1.5, wrist: -0.4, rotation: 0 },
+      leftHand: "flat", rightHand: "flat", duration: 600 },
+  ],
+  dost: [
+    { leftArm: { shoulder: 0.5, elbow: 1.6, wrist: 0, rotation: 0 },
+      rightArm: { shoulder: 0.5, elbow: 1.6, wrist: 0, rotation: 0 },
+      leftHand: "point", rightHand: "point", duration: 700 },
+  ],
+  ish: [
+    { leftArm: { shoulder: 0.5, elbow: 1.5, wrist: 0, rotation: 0 },
+      rightArm: { shoulder: 0.5, elbow: 1.5, wrist: 0, rotation: 0 },
+      leftHand: "fist", rightHand: "fist", duration: 400 },
+    { leftArm: { shoulder: 0.5, elbow: 1.6, wrist: 0, rotation: 0 },
+      rightArm: { shoulder: 0.5, elbow: 1.4, wrist: 0, rotation: 0 },
+      leftHand: "fist", rightHand: "fist", duration: 400 },
+  ],
+  vaqt: [
+    { leftArm: { shoulder: 0, elbow: 0, wrist: 0, rotation: 0 },
+      rightArm: { shoulder: 0.5, elbow: 1.7, wrist: 0, rotation: 0 },
+      leftHand: "flat", rightHand: "point", duration: 700 },
+  ],
+  ovqat: [
+    { leftArm: { shoulder: 0, elbow: 0, wrist: 0, rotation: 0 },
+      rightArm: { shoulder: 0.6, elbow: 2, wrist: 0, rotation: 0 },
+      leftHand: "open", rightHand: "pinch", duration: 500 },
+    { leftArm: { shoulder: 0, elbow: 0, wrist: 0, rotation: 0 },
+      rightArm: { shoulder: 0.5, elbow: 2.2, wrist: 0, rotation: 0 },
+      leftHand: "open", rightHand: "pinch", duration: 500 },
+  ],
+  ichmoq: [
+    { leftArm: { shoulder: 0, elbow: 0, wrist: 0, rotation: 0 },
+      rightArm: { shoulder: 0.5, elbow: 2.1, wrist: 0, rotation: 0.3 },
+      leftHand: "open", rightHand: "C", duration: 700 },
+  ],
+  uxlamoq: [
+    { leftArm: { shoulder: 0, elbow: 0, wrist: 0, rotation: 0 },
+      rightArm: { shoulder: 0.4, elbow: 2.3, wrist: 0, rotation: 0 },
+      leftHand: "open", rightHand: "flat", duration: 800 },
+  ],
+  yurmoq: [
+    { leftArm: { shoulder: 0.4, elbow: 1.5, wrist: 0, rotation: 0 },
+      rightArm: { shoulder: 0.4, elbow: 1.5, wrist: 0, rotation: 0 },
+      leftHand: "point", rightHand: "point", duration: 400 },
+    { leftArm: { shoulder: 0.5, elbow: 1.4, wrist: 0, rotation: 0 },
+      rightArm: { shoulder: 0.3, elbow: 1.6, wrist: 0, rotation: 0 },
+      leftHand: "point", rightHand: "point", duration: 400 },
+  ],
+  kelmoq: [
+    { leftArm: { shoulder: 0, elbow: 0, wrist: 0, rotation: 0 },
+      rightArm: { shoulder: 1.2, elbow: 1, wrist: 0, rotation: 0 },
+      leftHand: "open", rightHand: "open", duration: 500 },
+    { leftArm: { shoulder: 0, elbow: 0, wrist: 0, rotation: 0 },
+      rightArm: { shoulder: 0.5, elbow: 1.8, wrist: 0, rotation: 0 },
+      leftHand: "open", rightHand: "claw", duration: 500 },
+  ],
+  ketmoq: [
+    { leftArm: { shoulder: 0, elbow: 0, wrist: 0, rotation: 0 },
+      rightArm: { shoulder: 0.5, elbow: 1.8, wrist: 0, rotation: 0 },
+      leftHand: "open", rightHand: "open", duration: 500 },
+    { leftArm: { shoulder: 0, elbow: 0, wrist: 0, rotation: 0 },
+      rightArm: { shoulder: 1.3, elbow: 0.8, wrist: 0, rotation: 0.5 },
+      leftHand: "open", rightHand: "flat", duration: 500 },
+  ],
+  ko_rmoq: [
+    { leftArm: { shoulder: 0, elbow: 0, wrist: 0, rotation: 0 },
+      rightArm: { shoulder: 0.5, elbow: 2, wrist: 0, rotation: 0 },
+      leftHand: "open", rightHand: "peace", duration: 700 },
+  ],
+  eshitmoq: [
+    { leftArm: { shoulder: 0, elbow: 0, wrist: 0, rotation: 0 },
+      rightArm: { shoulder: 0.3, elbow: 2.4, wrist: 0, rotation: 0 },
+      leftHand: "open", rightHand: "C", duration: 700 },
+  ],
+  gapirmoq: [
+    { leftArm: { shoulder: 0, elbow: 0, wrist: 0, rotation: 0 },
+      rightArm: { shoulder: 0.4, elbow: 2.3, wrist: 0, rotation: 0 },
+      leftHand: "open", rightHand: "claw", duration: 400 },
+    { leftArm: { shoulder: 0, elbow: 0, wrist: 0, rotation: 0 },
+      rightArm: { shoulder: 0.5, elbow: 2.1, wrist: 0, rotation: 0 },
+      leftHand: "open", rightHand: "open", duration: 400 },
+  ],
+  yaxshimisiz: [
+    { leftArm: { shoulder: 0.6, elbow: 1.5, wrist: 0, rotation: 0 },
+      rightArm: { shoulder: 0.6, elbow: 1.5, wrist: 0, rotation: 0 },
+      leftHand: "claw", rightHand: "claw", duration: 500 },
+    { leftArm: { shoulder: 0, elbow: 0, wrist: 0, rotation: 0 },
+      rightArm: { shoulder: 0.8, elbow: 1.6, wrist: 0, rotation: 0 },
+      leftHand: "open", rightHand: "thumb", duration: 600 },
+  ],
+  xayr: [
+    { leftArm: { shoulder: 0, elbow: 0, wrist: 0, rotation: 0 },
+      rightArm: { shoulder: 1.4, elbow: 0.5, wrist: 0.3, rotation: 0 },
+      leftHand: "open", rightHand: "open", duration: 500 },
+    { leftArm: { shoulder: 0, elbow: 0, wrist: 0, rotation: 0 },
+      rightArm: { shoulder: 1.4, elbow: 0.5, wrist: -0.3, rotation: 0 },
+      leftHand: "open", rightHand: "open", duration: 500 },
+  ],
+  iltimos: [
+    { leftArm: { shoulder: 0, elbow: 0, wrist: 0, rotation: 0 },
+      rightArm: { shoulder: 0.5, elbow: 1.7, wrist: 0, rotation: 0 },
+      leftHand: "open", rightHand: "flat", duration: 400 },
+    { leftArm: { shoulder: 0, elbow: 0, wrist: 0, rotation: 0 },
+      rightArm: { shoulder: 0.7, elbow: 1.5, wrist: 0.3, rotation: 0 },
+      leftHand: "open", rightHand: "flat", duration: 600 },
+  ],
+  kechirim: [
+    { leftArm: { shoulder: 0.5, elbow: 1.5, wrist: 0, rotation: 0 },
+      rightArm: { shoulder: 0.5, elbow: 1.5, wrist: 0, rotation: 0 },
+      leftHand: "fist", rightHand: "fist", duration: 700 },
+  ],
+  yordam: [
+    { leftArm: { shoulder: 0.5, elbow: 1.4, wrist: 0, rotation: 0 },
+      rightArm: { shoulder: 0.5, elbow: 1.6, wrist: 0, rotation: 0 },
+      leftHand: "fist", rightHand: "flat", duration: 700 },
+  ],
+  katta: [
+    { leftArm: { shoulder: 0.6, elbow: 1.3, wrist: 0, rotation: 0 },
+      rightArm: { shoulder: 0.6, elbow: 1.3, wrist: 0, rotation: 0 },
+      leftHand: "C", rightHand: "C", duration: 400 },
+    { leftArm: { shoulder: 0.9, elbow: 0.8, wrist: 0, rotation: 0.3 },
+      rightArm: { shoulder: 0.9, elbow: 0.8, wrist: 0, rotation: -0.3 },
+      leftHand: "C", rightHand: "C", duration: 600 },
+  ],
+  kichik: [
+    { leftArm: { shoulder: 0.5, elbow: 1.6, wrist: 0, rotation: 0 },
+      rightArm: { shoulder: 0.5, elbow: 1.6, wrist: 0, rotation: 0 },
+      leftHand: "pinch", rightHand: "pinch", duration: 700 },
+  ],
+  issiq: [
+    { leftArm: { shoulder: 0, elbow: 0, wrist: 0, rotation: 0 },
+      rightArm: { shoulder: 0.5, elbow: 1.6, wrist: 0, rotation: 0 },
+      leftHand: "open", rightHand: "claw", duration: 700 },
+  ],
+  sovuq: [
+    { leftArm: { shoulder: 0.6, elbow: 1.5, wrist: 0, rotation: 0 },
+      rightArm: { shoulder: 0.6, elbow: 1.5, wrist: 0, rotation: 0 },
+      leftHand: "fist", rightHand: "fist", duration: 700 },
+  ],
+  bir: [
+    { leftArm: { shoulder: 0, elbow: 0, wrist: 0, rotation: 0 },
+      rightArm: { shoulder: 0.5, elbow: 1.8, wrist: 0, rotation: 0 },
+      leftHand: "open", rightHand: "point", duration: 500 },
+  ],
+  ikki: [
+    { leftArm: { shoulder: 0, elbow: 0, wrist: 0, rotation: 0 },
+      rightArm: { shoulder: 0.5, elbow: 1.8, wrist: 0, rotation: 0 },
+      leftHand: "open", rightHand: "peace", duration: 500 },
+  ],
+  uch: [
+    { leftArm: { shoulder: 0, elbow: 0, wrist: 0, rotation: 0 },
+      rightArm: { shoulder: 0.5, elbow: 1.8, wrist: 0, rotation: 0 },
+      leftHand: "open", rightHand: "rock", duration: 500 },
+  ],
+  besh: [
+    { leftArm: { shoulder: 0, elbow: 0, wrist: 0, rotation: 0 },
+      rightArm: { shoulder: 0.5, elbow: 1.8, wrist: 0, rotation: 0 },
+      leftHand: "open", rightHand: "open", duration: 500 },
+  ],
 };
+
+// Bir nechta yozilish variantlarini lug'at kalitiga moslash
+const WORD_ALIASES: Record<string, string> = {
+  "do'st": "dost",
+  "ko'rmoq": "ko_rmoq",
+  "yo'q": "yoq",
+  "yaxshimisiz?": "yaxshimisiz",
+};
+
 
 // Alphabet fingerspelling (har bir harf — bitta hand shape)
 const ALPHABET_HAND: Record<string, HandShape> = {
@@ -242,7 +451,8 @@ export function textToSignSequence(text: string): SignSequence[] {
   const sequences: SignSequence[] = [];
 
   for (const word of words) {
-    const dictPoses = WORD_DICTIONARY[word];
+    const key = WORD_ALIASES[word] ?? word;
+    const dictPoses = WORD_DICTIONARY[key];
     if (dictPoses) {
       sequences.push({ word, poses: [...dictPoses, REST_POSE] });
     } else {
