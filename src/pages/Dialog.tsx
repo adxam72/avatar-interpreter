@@ -43,21 +43,7 @@ const Dialog = () => {
     else player.play(text);
   };
 
-  // Auto-loop: detected sign → avatar plays it
   const lastLoopedRef = useRef<number>(0);
-  useEffect(() => {
-    if (!autoLoop) return;
-    const latest = detected[0];
-    if (!latest || latest.timestamp === lastLoopedRef.current) return;
-    lastLoopedRef.current = latest.timestamp;
-    const cleaned = latest.text.replace(/[^\p{L}\s]/gu, "").trim();
-    if (cleaned) {
-      setText(cleaned);
-      if (player.isPlaying) player.stop();
-      setTimeout(() => player.play(cleaned), 100);
-    }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [autoLoop, detected[0]?.timestamp]);
 
   // ─── Recognize (sign → text) ──────────────────────────────
   const videoRef = useRef<HTMLVideoElement>(null);
