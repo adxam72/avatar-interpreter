@@ -31,6 +31,7 @@ const App = () => (
             <Route path="/recognize" element={<ProtectedRoute><Dialog /></ProtectedRoute>} />
             <Route path="/chat" element={<ProtectedRoute><Chat /></ProtectedRoute>} />
             <Route path="/zehntube" element={<ProtectedRoute><ZehnTube /></ProtectedRoute>} />
+            <Route path="/profile" element={<ProtectedRoute><Profile /></ProtectedRoute>} />
             <Route path="*" element={<NotFound />} />
           </Routes>
         </AuthProvider>
