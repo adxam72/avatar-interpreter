@@ -9,7 +9,7 @@ import { HandPose, REST_POSE } from "@/lib/signEngine";
  * RPM avatars use Mixamo-style bone names (LeftArm, LeftForeArm, RightArm, ...)
  * We rotate bones at runtime to match HandPose.
  */
-const RPM_AVATAR_URL =
+const DEFAULT_AVATAR_URL =
   "https://models.readyplayer.me/64bfa15f0e72c63d7c3934a6.glb?morphTargets=ARKit&textureAtlas=1024";
 
 type BoneMap = {
@@ -27,8 +27,8 @@ function lerp(a: number, b: number, t: number) {
   return a + (b - a) * t;
 }
 
-function ReadyPlayerMeAvatar({ pose }: { pose: HandPose }) {
-  const { scene } = useGLTF(RPM_AVATAR_URL);
+function ReadyPlayerMeAvatar({ pose, url }: { pose: HandPose; url: string }) {
+  const { scene } = useGLTF(url);
   const bones = useRef<BoneMap>({});
   const cur = useRef({
     lShoulder: 0, lElbow: 0, lRot: 0,
@@ -141,7 +141,7 @@ function ReadyPlayerMeAvatar({ pose }: { pose: HandPose }) {
   return <primitive object={cloned} position={[0, -1.35, 0]} />;
 }
 
-useGLTF.preload(RPM_AVATAR_URL);
+useGLTF.preload(DEFAULT_AVATAR_URL);
 
 const Loader = () => (
   <Html center>
@@ -157,6 +157,8 @@ interface SignAvatarProps {
   showControls?: boolean;
   /** Compact variant — smaller, centered, no zoom; good for sidebars / split views. */
   compact?: boolean;
+  /** Custom Ready Player Me .glb URL. Falls back to the default avatar. */
+  avatarUrl?: string;
 }
 
 export const SignAvatar = ({
@@ -164,7 +166,9 @@ export const SignAvatar = ({
   className = "",
   showControls = false,
   compact = false,
+  avatarUrl,
 }: SignAvatarProps) => {
+  const url = avatarUrl?.trim() || DEFAULT_AVATAR_URL;
   return (
     <div className={`w-full h-full ${className}`}>
       <Canvas
@@ -186,7 +190,7 @@ export const SignAvatar = ({
         <directionalLight position={[-3, 2, -2]} intensity={0.3} color="#3b82f6" />
 
         <Suspense fallback={<Loader />}>
-          <ReadyPlayerMeAvatar pose={pose} />
+          <ReadyPlayerMeAvatar pose={pose} url={url} />
         </Suspense>
 
         <ContactShadows position={[0, -1.35, 0]} opacity={0.35} scale={3} blur={2.4} />

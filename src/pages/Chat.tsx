@@ -29,7 +29,7 @@ interface Message {
 }
 
 const Chat = () => {
-  const { user } = useAuth();
+  const { user, profile } = useAuth();
   const [contacts, setContacts] = useState<Profile[]>([]);
   const [activeContact, setActiveContact] = useState<Profile | null>(null);
   const [messages, setMessages] = useState<Message[]>([]);
@@ -326,7 +326,7 @@ const Chat = () => {
                 className="bg-background rounded-3xl overflow-hidden max-w-md w-full aspect-square relative"
                 onClick={(e) => e.stopPropagation()}
               >
-                <SignAvatar pose={player.currentPose} />
+                <SignAvatar pose={player.currentPose} avatarUrl={profile?.avatar_url || undefined} compact showControls />
                 <div className="absolute bottom-4 left-4 right-4 glass px-4 py-3 rounded-2xl text-center">
                   <div className="text-xs text-muted-foreground mb-1">Tarjima qilinyapti</div>
                   <div className="font-medium text-sm">"{player.currentWord || "..."}"</div>

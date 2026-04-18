@@ -3,12 +3,14 @@ import { motion } from "framer-motion";
 import { Navbar } from "@/components/Navbar";
 import { SignAvatar } from "@/components/SignAvatar";
 import { useSignPlayer } from "@/hooks/useSignPlayer";
+import { useAuth } from "@/contexts/AuthContext";
 import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
 import { Slider } from "@/components/ui/slider";
+import { Switch } from "@/components/ui/switch";
 import {
   Play, Square, RotateCcw, Sparkles, Hand,
-  Camera, CameraOff, ArrowLeftRight, AlertCircle,
+  Camera, CameraOff, ArrowLeftRight, AlertCircle, Repeat,
 } from "lucide-react";
 import { KNOWN_WORDS } from "@/lib/signEngine";
 
@@ -29,14 +31,19 @@ const SUGGESTIONS = ["Salom", "Rahmat", "Men sevaman", "Bugun yaxshi", "Ona uy"]
 interface DetectedSign { text: string; timestamp: number; }
 
 const Dialog = () => {
+  const { profile } = useAuth();
+
   // ─── Studio (text → sign) ─────────────────────────────────
   const [text, setText] = useState("Salom");
+  const [autoLoop, setAutoLoop] = useState(false);
   const player = useSignPlayer();
 
   const handlePlay = () => {
     if (player.isPlaying) player.stop();
     else player.play(text);
   };
+
+  const lastLoopedRef = useRef<number>(0);
 
   // ─── Recognize (sign → text) ──────────────────────────────
   const videoRef = useRef<HTMLVideoElement>(null);
@@ -50,6 +57,21 @@ const Dialog = () => {
   const [camError, setCamError] = useState<string | null>(null);
   const [stats, setStats] = useState({ pose: 0, leftHand: 0, rightHand: 0, face: 0 });
   const [detected, setDetected] = useState<DetectedSign[]>([]);
+
+  // Auto-loop: detected sign → avatar takrorlaydi
+  useEffect(() => {
+    if (!autoLoop) return;
+    const latest = detected[0];
+    if (!latest || latest.timestamp === lastLoopedRef.current) return;
+    lastLoopedRef.current = latest.timestamp;
+    const cleaned = latest.text.replace(/[^\p{L}\s]/gu, "").trim();
+    if (cleaned) {
+      setText(cleaned);
+      if (player.isPlaying) player.stop();
+      setTimeout(() => player.play(cleaned), 100);
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [autoLoop, detected]);
 
   const detectSign = (results: any): string | null => {
     const rh = results.rightHandLandmarks;
@@ -322,7 +344,12 @@ const Dialog = () => {
             className="space-y-3"
           >
             <div className="glass-card rounded-3xl overflow-hidden aspect-video relative">
-              <SignAvatar pose={player.currentPose} showControls compact />
+              <SignAvatar
+                pose={player.currentPose}
+                avatarUrl={profile?.avatar_url || undefined}
+                showControls
+                compact
+              />
 
               <div className="absolute top-3 left-3 right-3 flex justify-between items-start pointer-events-none">
                 <div className="glass px-3 py-1 rounded-full text-xs font-medium">
@@ -392,6 +419,17 @@ const Dialog = () => {
                 <Button onClick={() => setText("")} variant="outline" disabled={!text}>
                   <RotateCcw className="h-4 w-4" />
                 </Button>
+              </div>
+
+              <div className="flex items-center justify-between p-2.5 rounded-2xl bg-primary-soft/40">
+                <div className="flex items-center gap-2">
+                  <Repeat className="h-4 w-4 text-primary" />
+                  <span className="text-xs font-medium">Avto-takror</span>
+                  <span className="text-[10px] text-muted-foreground">
+                    aniqlangan ishorani avatar darrov takrorlaydi
+                  </span>
+                </div>
+                <Switch checked={autoLoop} onCheckedChange={setAutoLoop} />
               </div>
 
               <div className="flex flex-wrap gap-1.5 pt-1">
