@@ -3,6 +3,7 @@ import { motion } from "framer-motion";
 import { Navbar } from "@/components/Navbar";
 import { SignAvatar } from "@/components/SignAvatar";
 import { useSignPlayer } from "@/hooks/useSignPlayer";
+import { useAuth } from "@/contexts/AuthContext";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Search, Play, Youtube, Hand, Sparkles } from "lucide-react";
