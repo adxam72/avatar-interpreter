@@ -10,6 +10,7 @@ const navItems = [
   { path: "/dialog", label: "Dialog" },
   { path: "/chat", label: "Muloqot" },
   { path: "/zehntube", label: "ZehnTube" },
+  { path: "/profile", label: "Profil" },
 ];
 
 export const Navbar = () => {

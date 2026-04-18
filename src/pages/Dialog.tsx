@@ -58,6 +58,21 @@ const Dialog = () => {
   const [stats, setStats] = useState({ pose: 0, leftHand: 0, rightHand: 0, face: 0 });
   const [detected, setDetected] = useState<DetectedSign[]>([]);
 
+  // Auto-loop: detected sign → avatar takrorlaydi
+  useEffect(() => {
+    if (!autoLoop) return;
+    const latest = detected[0];
+    if (!latest || latest.timestamp === lastLoopedRef.current) return;
+    lastLoopedRef.current = latest.timestamp;
+    const cleaned = latest.text.replace(/[^\p{L}\s]/gu, "").trim();
+    if (cleaned) {
+      setText(cleaned);
+      if (player.isPlaying) player.stop();
+      setTimeout(() => player.play(cleaned), 100);
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [autoLoop, detected]);
+
   const detectSign = (results: any): string | null => {
     const rh = results.rightHandLandmarks;
     const lh = results.leftHandLandmarks;

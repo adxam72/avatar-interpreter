@@ -9,6 +9,7 @@ import Index from "./pages/Index.tsx";
 import Auth from "./pages/Auth.tsx";
 import Dialog from "./pages/Dialog.tsx";
 import Chat from "./pages/Chat.tsx";
+import Profile from "./pages/Profile.tsx";
 import ZehnTube from "./pages/ZehnTube.tsx";
 import NotFound from "./pages/NotFound.tsx";
 
