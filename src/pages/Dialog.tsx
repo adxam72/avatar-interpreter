@@ -327,7 +327,12 @@ const Dialog = () => {
             className="space-y-3"
           >
             <div className="glass-card rounded-3xl overflow-hidden aspect-video relative">
-              <SignAvatar pose={player.currentPose} showControls compact />
+              <SignAvatar
+                pose={player.currentPose}
+                avatarUrl={profile?.avatar_url || undefined}
+                showControls
+                compact
+              />
 
               <div className="absolute top-3 left-3 right-3 flex justify-between items-start pointer-events-none">
                 <div className="glass px-3 py-1 rounded-full text-xs font-medium">
