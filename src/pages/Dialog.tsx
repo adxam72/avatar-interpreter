@@ -404,6 +404,17 @@ const Dialog = () => {
                 </Button>
               </div>
 
+              <div className="flex items-center justify-between p-2.5 rounded-2xl bg-primary-soft/40">
+                <div className="flex items-center gap-2">
+                  <Repeat className="h-4 w-4 text-primary" />
+                  <span className="text-xs font-medium">Avto-takror</span>
+                  <span className="text-[10px] text-muted-foreground">
+                    aniqlangan ishorani avatar darrov takrorlaydi
+                  </span>
+                </div>
+                <Switch checked={autoLoop} onCheckedChange={setAutoLoop} />
+              </div>
+
               <div className="flex flex-wrap gap-1.5 pt-1">
                 {SUGGESTIONS.map((s) => (
                   <button
