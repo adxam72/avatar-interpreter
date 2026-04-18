@@ -7,8 +7,7 @@ import { AuthProvider } from "@/contexts/AuthContext";
 import { ProtectedRoute } from "@/components/ProtectedRoute";
 import Index from "./pages/Index.tsx";
 import Auth from "./pages/Auth.tsx";
-import Studio from "./pages/Studio.tsx";
-import Recognize from "./pages/Recognize.tsx";
+import Dialog from "./pages/Dialog.tsx";
 import Chat from "./pages/Chat.tsx";
 import ZehnTube from "./pages/ZehnTube.tsx";
 import NotFound from "./pages/NotFound.tsx";
@@ -25,8 +24,10 @@ const App = () => (
           <Routes>
             <Route path="/" element={<Index />} />
             <Route path="/auth" element={<Auth />} />
-            <Route path="/studio" element={<ProtectedRoute><Studio /></ProtectedRoute>} />
-            <Route path="/recognize" element={<ProtectedRoute><Recognize /></ProtectedRoute>} />
+            <Route path="/dialog" element={<ProtectedRoute><Dialog /></ProtectedRoute>} />
+            {/* Legacy routes redirect to unified Dialog */}
+            <Route path="/studio" element={<ProtectedRoute><Dialog /></ProtectedRoute>} />
+            <Route path="/recognize" element={<ProtectedRoute><Dialog /></ProtectedRoute>} />
             <Route path="/chat" element={<ProtectedRoute><Chat /></ProtectedRoute>} />
             <Route path="/zehntube" element={<ProtectedRoute><ZehnTube /></ProtectedRoute>} />
             <Route path="*" element={<NotFound />} />
