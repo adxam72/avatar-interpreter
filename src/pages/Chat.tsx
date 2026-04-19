@@ -281,6 +281,17 @@ const Chat = () => {
                       <Phone className="h-3 w-3" /> {activeContact.phone || activeContact.email}
                     </div>
                   </div>
+                  <div className="flex items-center gap-2 pl-2 border-l border-primary/10">
+                    <Sparkles className={`h-4 w-4 ${autoTranslate ? "text-primary" : "text-muted-foreground"}`} />
+                    <Label htmlFor="auto-translate" className="text-xs cursor-pointer hidden sm:block">
+                      Auto-tarjima
+                    </Label>
+                    <Switch
+                      id="auto-translate"
+                      checked={autoTranslate}
+                      onCheckedChange={setAutoTranslate}
+                    />
+                  </div>
                 </div>
 
                 {/* Messages */}
