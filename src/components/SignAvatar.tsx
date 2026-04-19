@@ -165,7 +165,7 @@ function StylizedAvatar({ pose }: { pose: HandPose }) {
   const shirt = "#3b82f6";
 
   return (
-    <group ref={bodyRef} position={[0, -0.2, 0]}>
+    <group ref={bodyRef} position={[0, -0.5, 0]}>
       {/* Head */}
       <mesh position={[0, 0.85, 0]} castShadow>
         <sphereGeometry args={[0.32, 32, 32]} />
