@@ -1,4 +1,4 @@
-import { Suspense, useEffect, useMemo, useRef } from "react";
+import { Component, ReactNode, Suspense, useEffect, useMemo, useRef, useState } from "react";
 import { Canvas, useFrame } from "@react-three/fiber";
 import { OrbitControls, ContactShadows, useGLTF, Html } from "@react-three/drei";
 import * as THREE from "three";
@@ -36,7 +36,6 @@ function ReadyPlayerMeAvatar({ pose, url }: { pose: HandPose; url: string }) {
     lHandClose: 0, rHandClose: 0,
   });
 
-  // Clone scene once so multiple instances do not share mutated bones.
   const cloned = useMemo(() => {
     const c = scene.clone(true);
     c.traverse((obj) => {
@@ -66,13 +65,10 @@ function ReadyPlayerMeAvatar({ pose, url }: { pose: HandPose; url: string }) {
     });
     bones.current = b;
 
-    // Rest pose offsets — RPM arms hang down.
-    // Lift them slightly so character looks alive.
     if (b.leftArm) b.leftArm.rotation.set(0, 0, 1.25);
     if (b.rightArm) b.rightArm.rotation.set(0, 0, -1.25);
   }, [cloned]);
 
-  // Hand-close intensity (0 = open, 1 = fist). Maps the 13 abstract shapes loosely.
   const handCloseAmount = (shape: string) => {
     switch (shape) {
       case "fist":
@@ -112,13 +108,9 @@ function ReadyPlayerMeAvatar({ pose, url }: { pose: HandPose; url: string }) {
     c.lHandClose = lerp(c.lHandClose, handCloseAmount(pose.leftHand), t);
     c.rHandClose = lerp(c.rHandClose, handCloseAmount(pose.rightHand), t);
 
-    // RPM bone axis convention:
-    // - Arm Z controls how far the arm is raised away from body (~1.3 = down, ~0 = sideways, ~-0.5 = up).
-    // - Arm X controls forward/back.
-    // - ForeArm Y controls elbow bend.
     if (b.leftArm) {
-      b.leftArm.rotation.z = 1.25 - c.lShoulder;          // raise arm
-      b.leftArm.rotation.x = -c.lShoulder * 0.4;          // forward
+      b.leftArm.rotation.z = 1.25 - c.lShoulder;
+      b.leftArm.rotation.x = -c.lShoulder * 0.4;
       b.leftArm.rotation.y = c.lRot;
     }
     if (b.rightArm) {
@@ -129,11 +121,9 @@ function ReadyPlayerMeAvatar({ pose, url }: { pose: HandPose; url: string }) {
     if (b.leftForeArm) b.leftForeArm.rotation.y = c.lElbow;
     if (b.rightForeArm) b.rightForeArm.rotation.y = -c.rElbow;
 
-    // Hand close — curl wrists inward when "fist-like".
     if (b.leftHand) b.leftHand.rotation.z = c.lHandClose * 0.9;
     if (b.rightHand) b.rightHand.rotation.z = -c.rHandClose * 0.9;
 
-    // Idle breathing
     if (b.spine) b.spine.rotation.x = Math.sin(state.clock.elapsedTime * 1.2) * 0.015;
     if (b.head) b.head.rotation.y = Math.sin(state.clock.elapsedTime * 0.6) * 0.04;
   });
@@ -141,7 +131,135 @@ function ReadyPlayerMeAvatar({ pose, url }: { pose: HandPose; url: string }) {
   return <primitive object={cloned} position={[0, -1.35, 0]} />;
 }
 
-useGLTF.preload(DEFAULT_AVATAR_URL);
+/**
+ * Stylized fallback avatar built from primitives.
+ * Used when the Ready Player Me GLB fails to load (e.g. CORS / network).
+ */
+function StylizedAvatar({ pose }: { pose: HandPose }) {
+  const cur = useRef({
+    lShoulder: 0, lElbow: 0,
+    rShoulder: 0, rElbow: 0,
+  });
+  const leftUpperRef = useRef<THREE.Group>(null);
+  const leftLowerRef = useRef<THREE.Group>(null);
+  const rightUpperRef = useRef<THREE.Group>(null);
+  const rightLowerRef = useRef<THREE.Group>(null);
+  const bodyRef = useRef<THREE.Group>(null);
+
+  useFrame((state, delta) => {
+    const t = Math.min(delta * 6, 1);
+    const c = cur.current;
+    c.lShoulder = lerp(c.lShoulder, pose.leftArm.shoulder, t);
+    c.lElbow = lerp(c.lElbow, pose.leftArm.elbow, t);
+    c.rShoulder = lerp(c.rShoulder, pose.rightArm.shoulder, t);
+    c.rElbow = lerp(c.rElbow, pose.rightArm.elbow, t);
+
+    if (leftUpperRef.current) leftUpperRef.current.rotation.z = 1.2 - c.lShoulder;
+    if (leftLowerRef.current) leftLowerRef.current.rotation.z = -c.lElbow * 0.8;
+    if (rightUpperRef.current) rightUpperRef.current.rotation.z = -1.2 + c.rShoulder;
+    if (rightLowerRef.current) rightLowerRef.current.rotation.z = c.rElbow * 0.8;
+    if (bodyRef.current) bodyRef.current.position.y = Math.sin(state.clock.elapsedTime * 1.2) * 0.02;
+  });
+
+  const skin = "#f4c9a5";
+  const shirt = "#3b82f6";
+
+  return (
+    <group ref={bodyRef} position={[0, -0.5, 0]}>
+      {/* Head */}
+      <mesh position={[0, 0.85, 0]} castShadow>
+        <sphereGeometry args={[0.32, 32, 32]} />
+        <meshStandardMaterial color={skin} roughness={0.6} />
+      </mesh>
+      {/* Hair */}
+      <mesh position={[0, 1.02, -0.02]} castShadow>
+        <sphereGeometry args={[0.34, 32, 32, 0, Math.PI * 2, 0, Math.PI / 2]} />
+        <meshStandardMaterial color="#2a2a3a" roughness={0.8} />
+      </mesh>
+      {/* Eyes */}
+      <mesh position={[-0.1, 0.88, 0.28]}>
+        <sphereGeometry args={[0.035, 16, 16]} />
+        <meshStandardMaterial color="#1a1a2e" />
+      </mesh>
+      <mesh position={[0.1, 0.88, 0.28]}>
+        <sphereGeometry args={[0.035, 16, 16]} />
+        <meshStandardMaterial color="#1a1a2e" />
+      </mesh>
+      {/* Neck */}
+      <mesh position={[0, 0.55, 0]} castShadow>
+        <cylinderGeometry args={[0.1, 0.12, 0.18, 16]} />
+        <meshStandardMaterial color={skin} roughness={0.6} />
+      </mesh>
+      {/* Torso */}
+      <mesh position={[0, 0.1, 0]} castShadow>
+        <capsuleGeometry args={[0.32, 0.55, 8, 16]} />
+        <meshStandardMaterial color={shirt} roughness={0.7} />
+      </mesh>
+
+      {/* Left arm group (anchored at shoulder) */}
+      <group position={[-0.38, 0.4, 0]}>
+        <group ref={leftUpperRef}>
+          <mesh position={[0, -0.22, 0]} castShadow>
+            <capsuleGeometry args={[0.08, 0.32, 8, 16]} />
+            <meshStandardMaterial color={shirt} roughness={0.7} />
+          </mesh>
+          <group position={[0, -0.46, 0]}>
+            <group ref={leftLowerRef}>
+              <mesh position={[0, -0.2, 0]} castShadow>
+                <capsuleGeometry args={[0.07, 0.28, 8, 16]} />
+                <meshStandardMaterial color={skin} roughness={0.6} />
+              </mesh>
+              <mesh position={[0, -0.42, 0]} castShadow>
+                <sphereGeometry args={[0.085, 16, 16]} />
+                <meshStandardMaterial color={skin} roughness={0.6} />
+              </mesh>
+            </group>
+          </group>
+        </group>
+      </group>
+
+      {/* Right arm group */}
+      <group position={[0.38, 0.4, 0]}>
+        <group ref={rightUpperRef}>
+          <mesh position={[0, -0.22, 0]} castShadow>
+            <capsuleGeometry args={[0.08, 0.32, 8, 16]} />
+            <meshStandardMaterial color={shirt} roughness={0.7} />
+          </mesh>
+          <group position={[0, -0.46, 0]}>
+            <group ref={rightLowerRef}>
+              <mesh position={[0, -0.2, 0]} castShadow>
+                <capsuleGeometry args={[0.07, 0.28, 8, 16]} />
+                <meshStandardMaterial color={skin} roughness={0.6} />
+              </mesh>
+              <mesh position={[0, -0.42, 0]} castShadow>
+                <sphereGeometry args={[0.085, 16, 16]} />
+                <meshStandardMaterial color={skin} roughness={0.6} />
+              </mesh>
+            </group>
+          </group>
+        </group>
+      </group>
+    </group>
+  );
+}
+
+// ErrorBoundary catches GLB load failures inside the Canvas
+class AvatarErrorBoundary extends Component<
+  { children: ReactNode; fallback: ReactNode },
+  { hasError: boolean }
+> {
+  state = { hasError: false };
+  static getDerivedStateFromError() {
+    return { hasError: true };
+  }
+  componentDidCatch(error: Error) {
+    console.warn("[SignAvatar] GLB load failed, using stylized fallback:", error.message);
+  }
+  render() {
+    if (this.state.hasError) return this.props.fallback;
+    return this.props.children;
+  }
+}
 
 const Loader = () => (
   <Html center>
@@ -173,7 +291,7 @@ export const SignAvatar = ({
     <div className={`w-full h-full ${className}`}>
       <Canvas
         shadows
-        camera={{ position: compact ? [0, 0.3, 2.4] : [0, 0.4, 2.8], fov: compact ? 28 : 30 }}
+        camera={{ position: compact ? [0, 0.1, 3.2] : [0, 0.2, 3.8], fov: compact ? 30 : 32 }}
         dpr={[1, 2]}
         gl={{ antialias: true }}
       >
@@ -189,9 +307,11 @@ export const SignAvatar = ({
         />
         <directionalLight position={[-3, 2, -2]} intensity={0.3} color="#3b82f6" />
 
-        <Suspense fallback={<Loader />}>
-          <ReadyPlayerMeAvatar pose={pose} url={url} />
-        </Suspense>
+        <AvatarErrorBoundary fallback={<StylizedAvatar pose={pose} />}>
+          <Suspense fallback={<Loader />}>
+            <ReadyPlayerMeAvatar pose={pose} url={url} />
+          </Suspense>
+        </AvatarErrorBoundary>
 
         <ContactShadows position={[0, -1.35, 0]} opacity={0.35} scale={3} blur={2.4} />
 
