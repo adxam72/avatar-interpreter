@@ -8,7 +8,9 @@ import { Input } from "@/components/ui/input";
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/contexts/AuthContext";
 import { toast } from "@/hooks/use-toast";
-import { Send, Search, Phone, MessageCircle, Hand, ArrowLeft, Loader2 } from "lucide-react";
+import { Send, Search, Phone, MessageCircle, Hand, ArrowLeft, Loader2, Sparkles } from "lucide-react";
+import { Switch } from "@/components/ui/switch";
+import { Label } from "@/components/ui/label";
 
 interface Profile {
   id: string;
