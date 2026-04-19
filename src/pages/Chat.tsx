@@ -107,6 +107,28 @@ const Chat = () => {
     messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
   }, [messages]);
 
+  // Auto-translate incoming text messages onto inline avatar
+  useEffect(() => {
+    if (!autoTranslate || !user || messages.length === 0) return;
+    const last = messages[messages.length - 1];
+    if (last.sender_id === user.id) return; // only incoming
+    if (last.message_type !== "text") return;
+    if (lastAutoPlayedRef.current === last.id) return;
+    lastAutoPlayedRef.current = last.id;
+    setInlinePlayingId(last.id);
+    inlinePlayer.play(last.content).finally(() => {
+      setInlinePlayingId((cur) => (cur === last.id ? null : cur));
+    });
+  }, [messages, autoTranslate, user]);
+
+  // Stop inline player when toggle turns off
+  useEffect(() => {
+    if (!autoTranslate) {
+      inlinePlayer.stop();
+      setInlinePlayingId(null);
+    }
+  }, [autoTranslate]);
+
   const search = async () => {
     if (!searchQuery.trim() || !user) return;
     setSearching(true);
