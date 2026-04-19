@@ -303,8 +303,9 @@ const Chat = () => {
                   ) : (
                     messages.map((m) => {
                       const mine = m.sender_id === user?.id;
+                      const isInlinePlaying = inlinePlayingId === m.id && !mine;
                       return (
-                        <div key={m.id} className={`flex ${mine ? "justify-end" : "justify-start"} group`}>
+                        <div key={m.id} className={`flex flex-col ${mine ? "items-end" : "items-start"} group`}>
                           <div className={`max-w-[75%] flex items-end gap-2 ${mine ? "flex-row-reverse" : ""}`}>
                             <div
                               className={`px-4 py-2.5 rounded-3xl text-sm ${
@@ -323,6 +324,38 @@ const Chat = () => {
                               <Hand className="h-3.5 w-3.5 text-primary" />
                             </button>
                           </div>
+                          <AnimatePresence>
+                            {isInlinePlaying && (
+                              <motion.div
+                                initial={{ opacity: 0, scale: 0.8, y: -8 }}
+                                animate={{ opacity: 1, scale: 1, y: 0 }}
+                                exit={{ opacity: 0, scale: 0.8, y: -8 }}
+                                className="mt-2 ml-2 glass-card rounded-2xl p-2 flex items-center gap-2 shadow-soft border border-primary/10"
+                              >
+                                <div className="h-20 w-20 rounded-xl overflow-hidden bg-gradient-to-br from-primary-soft to-background">
+                                  <SignAvatar
+                                    pose={inlinePlayer.currentPose}
+                                    avatarUrl={profile?.avatar_url || undefined}
+                                    compact
+                                  />
+                                </div>
+                                <div className="flex flex-col gap-1 pr-2">
+                                  <div className="flex items-center gap-1 text-[10px] text-primary font-medium">
+                                    <Sparkles className="h-3 w-3" /> Auto-tarjima
+                                  </div>
+                                  <div className="text-xs font-medium">
+                                    "{inlinePlayer.currentWord || "..."}"
+                                  </div>
+                                  <div className="h-1 w-24 bg-muted rounded-full overflow-hidden">
+                                    <div
+                                      className="h-full gradient-hero transition-all"
+                                      style={{ width: `${Math.round(inlinePlayer.progress * 100)}%` }}
+                                    />
+                                  </div>
+                                </div>
+                              </motion.div>
+                            )}
+                          </AnimatePresence>
                         </div>
                       );
                     })
