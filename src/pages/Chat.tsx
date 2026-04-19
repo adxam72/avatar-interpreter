@@ -41,8 +41,12 @@ const Chat = () => {
   const [searching, setSearching] = useState(false);
   const [showAvatar, setShowAvatar] = useState(false);
   const [avatarMessageId, setAvatarMessageId] = useState<string | null>(null);
+  const [autoTranslate, setAutoTranslate] = useState(true);
+  const [inlinePlayingId, setInlinePlayingId] = useState<string | null>(null);
   const player = useSignPlayer();
+  const inlinePlayer = useSignPlayer();
   const messagesEndRef = useRef<HTMLDivElement>(null);
+  const lastAutoPlayedRef = useRef<string | null>(null);
 
   // Load contacts
   useEffect(() => {
