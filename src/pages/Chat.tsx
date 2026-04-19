@@ -8,7 +8,9 @@ import { Input } from "@/components/ui/input";
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/contexts/AuthContext";
 import { toast } from "@/hooks/use-toast";
-import { Send, Search, Phone, MessageCircle, Hand, ArrowLeft, Loader2 } from "lucide-react";
+import { Send, Search, Phone, MessageCircle, Hand, ArrowLeft, Loader2, Sparkles } from "lucide-react";
+import { Switch } from "@/components/ui/switch";
+import { Label } from "@/components/ui/label";
 
 interface Profile {
   id: string;
@@ -39,8 +41,12 @@ const Chat = () => {
   const [searching, setSearching] = useState(false);
   const [showAvatar, setShowAvatar] = useState(false);
   const [avatarMessageId, setAvatarMessageId] = useState<string | null>(null);
+  const [autoTranslate, setAutoTranslate] = useState(true);
+  const [inlinePlayingId, setInlinePlayingId] = useState<string | null>(null);
   const player = useSignPlayer();
+  const inlinePlayer = useSignPlayer();
   const messagesEndRef = useRef<HTMLDivElement>(null);
+  const lastAutoPlayedRef = useRef<string | null>(null);
 
   // Load contacts
   useEffect(() => {
@@ -100,6 +106,28 @@ const Chat = () => {
   useEffect(() => {
     messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
   }, [messages]);
+
+  // Auto-translate incoming text messages onto inline avatar
+  useEffect(() => {
+    if (!autoTranslate || !user || messages.length === 0) return;
+    const last = messages[messages.length - 1];
+    if (last.sender_id === user.id) return; // only incoming
+    if (last.message_type !== "text") return;
+    if (lastAutoPlayedRef.current === last.id) return;
+    lastAutoPlayedRef.current = last.id;
+    setInlinePlayingId(last.id);
+    inlinePlayer.play(last.content).finally(() => {
+      setInlinePlayingId((cur) => (cur === last.id ? null : cur));
+    });
+  }, [messages, autoTranslate, user]);
+
+  // Stop inline player when toggle turns off
+  useEffect(() => {
+    if (!autoTranslate) {
+      inlinePlayer.stop();
+      setInlinePlayingId(null);
+    }
+  }, [autoTranslate]);
 
   const search = async () => {
     if (!searchQuery.trim() || !user) return;
@@ -253,6 +281,17 @@ const Chat = () => {
                       <Phone className="h-3 w-3" /> {activeContact.phone || activeContact.email}
                     </div>
                   </div>
+                  <div className="flex items-center gap-2 pl-2 border-l border-primary/10">
+                    <Sparkles className={`h-4 w-4 ${autoTranslate ? "text-primary" : "text-muted-foreground"}`} />
+                    <Label htmlFor="auto-translate" className="text-xs cursor-pointer hidden sm:block">
+                      Auto-tarjima
+                    </Label>
+                    <Switch
+                      id="auto-translate"
+                      checked={autoTranslate}
+                      onCheckedChange={setAutoTranslate}
+                    />
+                  </div>
                 </div>
 
                 {/* Messages */}
@@ -264,8 +303,9 @@ const Chat = () => {
                   ) : (
                     messages.map((m) => {
                       const mine = m.sender_id === user?.id;
+                      const isInlinePlaying = inlinePlayingId === m.id && !mine;
                       return (
-                        <div key={m.id} className={`flex ${mine ? "justify-end" : "justify-start"} group`}>
+                        <div key={m.id} className={`flex flex-col ${mine ? "items-end" : "items-start"} group`}>
                           <div className={`max-w-[75%] flex items-end gap-2 ${mine ? "flex-row-reverse" : ""}`}>
                             <div
                               className={`px-4 py-2.5 rounded-3xl text-sm ${
@@ -284,6 +324,38 @@ const Chat = () => {
                               <Hand className="h-3.5 w-3.5 text-primary" />
                             </button>
                           </div>
+                          <AnimatePresence>
+                            {isInlinePlaying && (
+                              <motion.div
+                                initial={{ opacity: 0, scale: 0.8, y: -8 }}
+                                animate={{ opacity: 1, scale: 1, y: 0 }}
+                                exit={{ opacity: 0, scale: 0.8, y: -8 }}
+                                className="mt-2 ml-2 glass-card rounded-2xl p-2 flex items-center gap-2 shadow-soft border border-primary/10"
+                              >
+                                <div className="h-20 w-20 rounded-xl overflow-hidden bg-gradient-to-br from-primary-soft to-background">
+                                  <SignAvatar
+                                    pose={inlinePlayer.currentPose}
+                                    avatarUrl={profile?.avatar_url || undefined}
+                                    compact
+                                  />
+                                </div>
+                                <div className="flex flex-col gap-1 pr-2">
+                                  <div className="flex items-center gap-1 text-[10px] text-primary font-medium">
+                                    <Sparkles className="h-3 w-3" /> Auto-tarjima
+                                  </div>
+                                  <div className="text-xs font-medium">
+                                    "{inlinePlayer.currentWord || "..."}"
+                                  </div>
+                                  <div className="h-1 w-24 bg-muted rounded-full overflow-hidden">
+                                    <div
+                                      className="h-full gradient-hero transition-all"
+                                      style={{ width: `${Math.round(inlinePlayer.progress * 100)}%` }}
+                                    />
+                                  </div>
+                                </div>
+                              </motion.div>
+                            )}
+                          </AnimatePresence>
                         </div>
                       );
                     })
