@@ -291,7 +291,7 @@ export const SignAvatar = ({
     <div className={`w-full h-full ${className}`}>
       <Canvas
         shadows
-        camera={{ position: compact ? [0, 0.3, 2.4] : [0, 0.4, 2.8], fov: compact ? 28 : 30 }}
+        camera={{ position: compact ? [0, 0.1, 3.2] : [0, 0.2, 3.8], fov: compact ? 30 : 32 }}
         dpr={[1, 2]}
         gl={{ antialias: true }}
       >
