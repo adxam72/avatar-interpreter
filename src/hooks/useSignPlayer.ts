@@ -18,6 +18,8 @@ export function useSignPlayer() {
   };
 
   const play = async (text: string) => {
+    cancelRef.current = true;
+    await new Promise((r) => setTimeout(r, 0));
     cancelRef.current = false;
     const sequences = textToSignSequence(text);
     if (sequences.length === 0) return;

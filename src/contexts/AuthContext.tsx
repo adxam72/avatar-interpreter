@@ -46,11 +46,13 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
   };
 
   useEffect(() => {
+    let initialDone = false;
+
     const { data: { subscription } } = supabase.auth.onAuthStateChange((_event, session) => {
+      if (!initialDone) return;
       setSession(session);
       setUser(session?.user ?? null);
       if (session?.user) {
-        // defer to avoid deadlocks
         setTimeout(() => loadProfile(session.user.id), 0);
       } else {
         setProfile(null);
@@ -59,6 +61,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
     });
 
     supabase.auth.getSession().then(({ data: { session } }) => {
+      initialDone = true;
       setSession(session);
       setUser(session?.user ?? null);
       if (session?.user) loadProfile(session.user.id);

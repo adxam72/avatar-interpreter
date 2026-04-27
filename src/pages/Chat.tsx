@@ -92,7 +92,10 @@ const Chat = () => {
             (m.sender_id === user.id && m.receiver_id === activeContact.user_id) ||
             (m.sender_id === activeContact.user_id && m.receiver_id === user.id)
           ) {
-            setMessages((prev) => [...prev, m]);
+            setMessages((prev) => {
+              if (prev.some((existing) => existing.id === m.id)) return prev;
+              return [...prev, m];
+            });
           }
         }
       )
@@ -132,11 +135,13 @@ const Chat = () => {
   const search = async () => {
     if (!searchQuery.trim() || !user) return;
     setSearching(true);
-    const q = searchQuery.trim();
+    const q = searchQuery.trim().replace(/[%_(),.*]/g, "");
+    if (!q) { setSearching(false); return; }
+    const pattern = `%${q}%`;
     const { data } = await supabase
       .from("profiles")
       .select("*")
-      .or(`phone.ilike.%${q}%,email.ilike.%${q}%,full_name.ilike.%${q}%`)
+      .or(`phone.ilike.${pattern},email.ilike.${pattern},full_name.ilike.${pattern}`)
       .neq("user_id", user.id)
       .limit(10);
     setSearchResults((data as Profile[]) || []);

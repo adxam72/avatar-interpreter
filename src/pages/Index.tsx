@@ -89,9 +89,9 @@ const Index = () => {
               kamera ishoralarni o'qiydi.
             </p>
 
-            <div className="flex flex-wrap gap-3 pt-2">
-              <Button variant="hero" size="lg" asChild>
-                <Link to={user ? "/studio" : "/auth?mode=signup"}>
+            <div className="flex flex-wrap gap-4 pt-4">
+              <Button variant="hero" size="xl" asChild className="shadow-glow">
+                <Link to={user ? "/dialog" : "/auth?mode=signup"}>
                   Bepul boshlash <ArrowRight className="h-5 w-5" />
                 </Link>
               </Button>
@@ -114,14 +114,14 @@ const Index = () => {
             initial={{ opacity: 0, scale: 0.9 }}
             animate={{ opacity: 1, scale: 1 }}
             transition={{ duration: 0.8, delay: 0.2 }}
-            className="relative"
+            className="relative flex items-center justify-center"
           >
-            <div className="absolute -inset-8 gradient-hero opacity-20 blur-3xl rounded-full" />
-            <div className="relative aspect-square max-w-md mx-auto">
+            <div className="absolute -inset-12 gradient-hero opacity-20 blur-3xl rounded-full" />
+            <div className="relative w-full max-w-lg aspect-[3/4] mx-auto">
               <div className="absolute inset-0 glass-card rounded-[2rem] overflow-hidden">
                 <SignAvatar pose={player.currentPose} />
               </div>
-              <div className="absolute -bottom-4 left-1/2 -translate-x-1/2 glass px-5 py-2.5 rounded-full text-sm font-medium shadow-elegant">
+              <div className="absolute -bottom-4 left-1/2 -translate-x-1/2 glass px-5 py-2.5 rounded-full text-sm font-medium shadow-elegant whitespace-nowrap">
                 {player.currentWord ? (
                   <span className="flex items-center gap-2">
                     <span className="h-2 w-2 rounded-full bg-success animate-pulse" />
@@ -187,7 +187,8 @@ const Index = () => {
               </p>
             </div>
 
-            <div className="grid md:grid-cols-3 gap-8">
+            <div className="grid md:grid-cols-3 gap-8 relative">
+              <div className="hidden md:block absolute top-10 left-[20%] right-[20%] h-0.5 bg-gradient-to-r from-primary/20 via-primary/40 to-primary/20" />
               {[
                 { icon: Globe, num: "01", title: "Matn yoki ovoz", desc: "Sog' inson o'z fikrini matn ko'rinishida yozadi yoki video joylaydi." },
                 { icon: Zap, num: "02", title: "AI qayta ishlash", desc: "Zehn AI matnni surdo tilidagi ketma-ketlikka aylantiradi." },
@@ -199,16 +200,16 @@ const Index = () => {
                   whileInView={{ opacity: 1, y: 0 }}
                   viewport={{ once: true }}
                   transition={{ delay: i * 0.15 }}
-                  className="relative"
+                  className="relative text-center"
                 >
-                  <div className="text-7xl font-display font-bold text-primary/10 absolute -top-4 right-0">{s.num}</div>
-                  <div className="relative">
-                    <div className="inline-flex p-3 rounded-2xl bg-primary text-primary-foreground mb-4 shadow-soft">
-                      <s.icon className="h-6 w-6" />
-                    </div>
-                    <h3 className="text-xl font-display font-semibold mb-2">{s.title}</h3>
-                    <p className="text-muted-foreground leading-relaxed">{s.desc}</p>
+                  <div className="inline-flex items-center justify-center w-20 h-20 rounded-full bg-primary/10 border-2 border-primary/20 mb-6 relative">
+                    <s.icon className="h-8 w-8 text-primary" />
+                    <span className="absolute -top-2 -right-2 w-7 h-7 rounded-full bg-primary text-primary-foreground text-xs font-bold flex items-center justify-center shadow-soft">
+                      {s.num}
+                    </span>
                   </div>
+                  <h3 className="text-xl font-display font-semibold mb-2">{s.title}</h3>
+                  <p className="text-muted-foreground leading-relaxed">{s.desc}</p>
                 </motion.div>
               ))}
             </div>
@@ -228,7 +229,7 @@ const Index = () => {
               Bepul ro'yxatdan o'ting va Zehn AI ning barcha funksiyalarini sinab ko'ring.
             </p>
             <Button variant="glass" size="xl" asChild>
-              <Link to={user ? "/studio" : "/auth?mode=signup"}>
+              <Link to={user ? "/dialog" : "/auth?mode=signup"}>
                 Hoziroq boshlash <ArrowRight className="h-5 w-5" />
               </Link>
             </Button>

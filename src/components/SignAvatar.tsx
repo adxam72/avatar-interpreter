@@ -3,38 +3,100 @@ import { Canvas, useFrame } from "@react-three/fiber";
 import { OrbitControls, ContactShadows, useGLTF, Html } from "@react-three/drei";
 import * as THREE from "three";
 import { HandPose, REST_POSE } from "@/lib/signEngine";
+import { extractBones, extractMorphTargets, FullBoneMap, MorphTargetMap } from "@/lib/boneMap";
+import { HAND_SHAPES, type HandFingerPose, FACE_PRESETS, type FacialExpression } from "@/lib/handShapes";
 
-/**
- * Ready Player Me avatar — half-body GLB model
- * RPM avatars use Mixamo-style bone names (LeftArm, LeftForeArm, RightArm, ...)
- * We rotate bones at runtime to match HandPose.
- */
 const DEFAULT_AVATAR_URL =
   "https://models.readyplayer.me/64bfa15f0e72c63d7c3934a6.glb?morphTargets=ARKit&textureAtlas=1024";
-
-type BoneMap = {
-  leftArm?: THREE.Bone;
-  leftForeArm?: THREE.Bone;
-  leftHand?: THREE.Bone;
-  rightArm?: THREE.Bone;
-  rightForeArm?: THREE.Bone;
-  rightHand?: THREE.Bone;
-  head?: THREE.Bone;
-  spine?: THREE.Bone;
-};
 
 function lerp(a: number, b: number, t: number) {
   return a + (b - a) * t;
 }
 
+const _qa = new THREE.Quaternion();
+const _qb = new THREE.Quaternion();
+const _euler = new THREE.Euler();
+
+function slerpBone(bone: THREE.Bone, ex: number, ey: number, ez: number, t: number) {
+  _qa.copy(bone.quaternion);
+  _euler.set(ex, ey, ez);
+  _qb.setFromEuler(_euler);
+  _qa.slerp(_qb, t);
+  bone.quaternion.copy(_qa);
+}
+
+const FINGER_NAMES = ["Thumb", "Index", "Middle", "Ring", "Pinky"] as const;
+type FingerField = "thumb" | "index" | "middle" | "ring" | "pinky";
+const FINGER_KEYS: Record<typeof FINGER_NAMES[number], FingerField> = {
+  Thumb: "thumb",
+  Index: "index",
+  Middle: "middle",
+  Ring: "ring",
+  Pinky: "pinky",
+};
+
+function applyFingers(
+  bones: FullBoneMap,
+  side: "Left" | "Right",
+  shape: HandFingerPose,
+  current: Record<string, number>,
+  t: number,
+) {
+  for (const finger of FINGER_NAMES) {
+    const joints = shape[FINGER_KEYS[finger]];
+    for (let j = 1; j <= 3; j++) {
+      const boneName = `${side}Hand${finger}${j}` as keyof typeof bones;
+      const bone = bones[boneName];
+      if (!bone) continue;
+      const key = `${side}${finger}${j}`;
+      const target = j === 1 ? joints.joint1 : j === 2 ? joints.joint2 : joints.joint3;
+      current[key] = lerp(current[key] ?? 0, target, t);
+      const val = current[key];
+      if (finger === "Thumb") {
+        bone.rotation.z = val * (side === "Left" ? 1 : -1);
+      } else {
+        bone.rotation.z = val * (side === "Left" ? 1 : -1) * 0.3;
+        bone.rotation.x = val * 0.6;
+      }
+    }
+  }
+}
+
+function applyMorphTargets(
+  morphMap: MorphTargetMap,
+  expression: FacialExpression,
+  current: Record<string, number>,
+  t: number,
+) {
+  const active = new Set(Object.keys(expression));
+  for (const name of Object.keys(current)) {
+    if (!active.has(name)) {
+      active.add(name);
+    }
+  }
+  for (const name of active) {
+    const entry = morphMap[name];
+    if (!entry) continue;
+    const target = expression[name] ?? 0;
+    current[name] = lerp(current[name] ?? 0, target, t);
+    entry.mesh.morphTargetInfluences![entry.index] = current[name];
+  }
+}
+
 function ReadyPlayerMeAvatar({ pose, url }: { pose: HandPose; url: string }) {
   const { scene } = useGLTF(url);
-  const bones = useRef<BoneMap>({});
-  const cur = useRef({
+  const bonesRef = useRef<FullBoneMap>({});
+  const morphRef = useRef<MorphTargetMap>({});
+  const fingerCur = useRef<Record<string, number>>({});
+  const faceCur = useRef<Record<string, number>>({});
+  const armCur = useRef({
     lShoulder: 0, lElbow: 0, lRot: 0,
     rShoulder: 0, rElbow: 0, rRot: 0,
-    lHandClose: 0, rHandClose: 0,
   });
+  const headCur = useRef({ x: 0, y: 0, z: 0 });
+  const spineCur = useRef({ x: 0, y: 0, z: 0 });
+  const nextBlink = useRef(3 + Math.random() * 2);
+  const blinkPhase = useRef(-1);
 
   const cloned = useMemo(() => {
     const c = scene.clone(true);
@@ -45,96 +107,103 @@ function ReadyPlayerMeAvatar({ pose, url }: { pose: HandPose; url: string }) {
         m.receiveShadow = true;
       }
     });
+    const bones = extractBones(c);
+    const morphs = extractMorphTargets(c);
+    bonesRef.current = bones;
+    morphRef.current = morphs;
+    if (bones.LeftArm) bones.LeftArm.rotation.set(0, 0, 1.25);
+    if (bones.RightArm) bones.RightArm.rotation.set(0, 0, -1.25);
     return c;
   }, [scene]);
 
-  useEffect(() => {
-    const b: BoneMap = {};
-    cloned.traverse((obj) => {
-      if ((obj as THREE.Bone).isBone) {
-        const name = obj.name;
-        if (name === "LeftArm") b.leftArm = obj as THREE.Bone;
-        else if (name === "LeftForeArm") b.leftForeArm = obj as THREE.Bone;
-        else if (name === "LeftHand") b.leftHand = obj as THREE.Bone;
-        else if (name === "RightArm") b.rightArm = obj as THREE.Bone;
-        else if (name === "RightForeArm") b.rightForeArm = obj as THREE.Bone;
-        else if (name === "RightHand") b.rightHand = obj as THREE.Bone;
-        else if (name === "Head") b.head = obj as THREE.Bone;
-        else if (name === "Spine2") b.spine = obj as THREE.Bone;
-      }
-    });
-    bones.current = b;
-
-    if (b.leftArm) b.leftArm.rotation.set(0, 0, 1.25);
-    if (b.rightArm) b.rightArm.rotation.set(0, 0, -1.25);
-  }, [cloned]);
-
-  const handCloseAmount = (shape: string) => {
-    switch (shape) {
-      case "fist":
-      case "thumb":
-        return 0.95;
-      case "point":
-      case "L":
-      case "Y":
-        return 0.7;
-      case "peace":
-      case "rock":
-        return 0.55;
-      case "ok":
-      case "pinch":
-      case "C":
-        return 0.4;
-      case "claw":
-        return 0.3;
-      case "flat":
-      case "open":
-      default:
-        return 0.05;
-    }
-  };
-
   useFrame((state, delta) => {
-    const t = Math.min(delta * 6, 1);
-    const c = cur.current;
-    const b = bones.current;
+    const t = Math.min(delta * 8, 1);
+    const b = bonesRef.current;
+    const c = armCur.current;
+    const elapsed = state.clock.elapsedTime;
 
+    // Arm IK
     c.lShoulder = lerp(c.lShoulder, pose.leftArm.shoulder, t);
     c.lElbow = lerp(c.lElbow, pose.leftArm.elbow, t);
     c.lRot = lerp(c.lRot, pose.leftArm.rotation, t);
     c.rShoulder = lerp(c.rShoulder, pose.rightArm.shoulder, t);
     c.rElbow = lerp(c.rElbow, pose.rightArm.elbow, t);
     c.rRot = lerp(c.rRot, pose.rightArm.rotation, t);
-    c.lHandClose = lerp(c.lHandClose, handCloseAmount(pose.leftHand), t);
-    c.rHandClose = lerp(c.rHandClose, handCloseAmount(pose.rightHand), t);
 
-    if (b.leftArm) {
-      b.leftArm.rotation.z = 1.25 - c.lShoulder;
-      b.leftArm.rotation.x = -c.lShoulder * 0.4;
-      b.leftArm.rotation.y = c.lRot;
+    if (b.LeftArm) slerpBone(b.LeftArm, -c.lShoulder * 0.4, c.lRot, 1.25 - c.lShoulder, t);
+    if (b.RightArm) slerpBone(b.RightArm, -c.rShoulder * 0.4, -c.rRot, -1.25 + c.rShoulder, t);
+    if (b.LeftForeArm) slerpBone(b.LeftForeArm, 0, c.lElbow, 0, t);
+    if (b.RightForeArm) slerpBone(b.RightForeArm, 0, -c.rElbow, 0, t);
+
+    // Wrist
+    const lShape = HAND_SHAPES[pose.leftHand] ?? HAND_SHAPES.rest;
+    const rShape = HAND_SHAPES[pose.rightHand] ?? HAND_SHAPES.rest;
+    if (b.LeftHand) slerpBone(b.LeftHand, lShape.wristBend, 0, lShape.wristTwist, t);
+    if (b.RightHand) slerpBone(b.RightHand, rShape.wristBend, 0, -rShape.wristTwist, t);
+
+    // Fingers
+    applyFingers(b, "Left", lShape, fingerCur.current, t);
+    applyFingers(b, "Right", rShape, fingerCur.current, t);
+
+    // Head pose from sign data
+    const headTarget = pose.head ?? { x: 0, y: 0, z: 0 };
+    const hc = headCur.current;
+    hc.x = lerp(hc.x, headTarget.x, t);
+    hc.y = lerp(hc.y, headTarget.y, t);
+    hc.z = lerp(hc.z, headTarget.z, t);
+
+    // Spine from sign data
+    const spineTarget = pose.spine ?? { x: 0, y: 0, z: 0 };
+    const sc = spineCur.current;
+    sc.x = lerp(sc.x, spineTarget.x, t);
+    sc.y = lerp(sc.y, spineTarget.y, t);
+    sc.z = lerp(sc.z, spineTarget.z, t);
+
+    // Idle animation layered on top
+    const breathe = Math.sin(elapsed * 1.5) * 0.01;
+    const headDrift = Math.sin(elapsed * 0.4) * 0.03;
+    const headTilt = Math.sin(elapsed * 0.3 + 1) * 0.015;
+
+    if (b.Spine2) slerpBone(b.Spine2, sc.x + breathe, sc.y, sc.z, t);
+    if (b.Spine1) b.Spine1.rotation.x = breathe * 0.5;
+    if (b.Neck) b.Neck.rotation.x = breathe * 0.3;
+    if (b.Head) slerpBone(b.Head, hc.x + headTilt, hc.y + headDrift, hc.z, t);
+
+    // Face morph targets
+    const facePresetName = pose.face ?? "neutral";
+    const facePreset = FACE_PRESETS[facePresetName] ?? FACE_PRESETS.neutral;
+    const faceTarget: Record<string, number> = { ...facePreset };
+
+    // Blink system
+    nextBlink.current -= delta;
+    if (nextBlink.current <= 0 && blinkPhase.current < 0) {
+      blinkPhase.current = 0;
+      nextBlink.current = 3 + Math.random() * 4;
     }
-    if (b.rightArm) {
-      b.rightArm.rotation.z = -1.25 + c.rShoulder;
-      b.rightArm.rotation.x = -c.rShoulder * 0.4;
-      b.rightArm.rotation.y = -c.rRot;
+    if (blinkPhase.current >= 0) {
+      blinkPhase.current += delta;
+      const bp = blinkPhase.current;
+      let blinkVal = 0;
+      if (bp < 0.08) blinkVal = bp / 0.08;
+      else if (bp < 0.14) blinkVal = 1;
+      else if (bp < 0.22) blinkVal = 1 - (bp - 0.14) / 0.08;
+      else blinkPhase.current = -1;
+      faceTarget.eyeBlinkLeft = Math.max(faceTarget.eyeBlinkLeft ?? 0, blinkVal);
+      faceTarget.eyeBlinkRight = Math.max(faceTarget.eyeBlinkRight ?? 0, blinkVal);
     }
-    if (b.leftForeArm) b.leftForeArm.rotation.y = c.lElbow;
-    if (b.rightForeArm) b.rightForeArm.rotation.y = -c.rElbow;
 
-    if (b.leftHand) b.leftHand.rotation.z = c.lHandClose * 0.9;
-    if (b.rightHand) b.rightHand.rotation.z = -c.rHandClose * 0.9;
+    // Subtle brow movement during signing
+    const isActive = pose !== REST_POSE && (pose.leftArm.shoulder > 0.1 || pose.rightArm.shoulder > 0.1);
+    if (isActive) {
+      faceTarget.browInnerUp = (faceTarget.browInnerUp ?? 0) + Math.sin(elapsed * 2) * 0.08;
+    }
 
-    if (b.spine) b.spine.rotation.x = Math.sin(state.clock.elapsedTime * 1.2) * 0.015;
-    if (b.head) b.head.rotation.y = Math.sin(state.clock.elapsedTime * 0.6) * 0.04;
+    applyMorphTargets(morphRef.current, faceTarget, faceCur.current, t * 0.7);
   });
 
   return <primitive object={cloned} position={[0, -1.35, 0]} />;
 }
 
-/**
- * Stylized fallback avatar built from primitives.
- * Used when the Ready Player Me GLB fails to load (e.g. CORS / network).
- */
 function StylizedAvatar({ pose }: { pose: HandPose }) {
   const cur = useRef({
     lShoulder: 0, lElbow: 0,
@@ -166,17 +235,14 @@ function StylizedAvatar({ pose }: { pose: HandPose }) {
 
   return (
     <group ref={bodyRef} position={[0, -0.5, 0]}>
-      {/* Head */}
       <mesh position={[0, 0.85, 0]} castShadow>
         <sphereGeometry args={[0.32, 32, 32]} />
         <meshStandardMaterial color={skin} roughness={0.6} />
       </mesh>
-      {/* Hair */}
       <mesh position={[0, 1.02, -0.02]} castShadow>
         <sphereGeometry args={[0.34, 32, 32, 0, Math.PI * 2, 0, Math.PI / 2]} />
         <meshStandardMaterial color="#2a2a3a" roughness={0.8} />
       </mesh>
-      {/* Eyes */}
       <mesh position={[-0.1, 0.88, 0.28]}>
         <sphereGeometry args={[0.035, 16, 16]} />
         <meshStandardMaterial color="#1a1a2e" />
@@ -185,18 +251,14 @@ function StylizedAvatar({ pose }: { pose: HandPose }) {
         <sphereGeometry args={[0.035, 16, 16]} />
         <meshStandardMaterial color="#1a1a2e" />
       </mesh>
-      {/* Neck */}
       <mesh position={[0, 0.55, 0]} castShadow>
         <cylinderGeometry args={[0.1, 0.12, 0.18, 16]} />
         <meshStandardMaterial color={skin} roughness={0.6} />
       </mesh>
-      {/* Torso */}
       <mesh position={[0, 0.1, 0]} castShadow>
         <capsuleGeometry args={[0.32, 0.55, 8, 16]} />
         <meshStandardMaterial color={shirt} roughness={0.7} />
       </mesh>
-
-      {/* Left arm group (anchored at shoulder) */}
       <group position={[-0.38, 0.4, 0]}>
         <group ref={leftUpperRef}>
           <mesh position={[0, -0.22, 0]} castShadow>
@@ -217,8 +279,6 @@ function StylizedAvatar({ pose }: { pose: HandPose }) {
           </group>
         </group>
       </group>
-
-      {/* Right arm group */}
       <group position={[0.38, 0.4, 0]}>
         <group ref={rightUpperRef}>
           <mesh position={[0, -0.22, 0]} castShadow>
@@ -243,7 +303,6 @@ function StylizedAvatar({ pose }: { pose: HandPose }) {
   );
 }
 
-// ErrorBoundary catches GLB load failures inside the Canvas
 class AvatarErrorBoundary extends Component<
   { children: ReactNode; fallback: ReactNode },
   { hasError: boolean }
@@ -273,10 +332,27 @@ interface SignAvatarProps {
   pose?: HandPose;
   className?: string;
   showControls?: boolean;
-  /** Compact variant — smaller, centered, no zoom; good for sidebars / split views. */
   compact?: boolean;
-  /** Custom Ready Player Me .glb URL. Falls back to the default avatar. */
   avatarUrl?: string;
+}
+
+function useAvatarColors() {
+  const [bg, setBg] = useState("#f8fafc");
+  const [fog, setFog] = useState("#f8fafc");
+
+  useEffect(() => {
+    const update = () => {
+      const s = getComputedStyle(document.documentElement);
+      setBg(s.getPropertyValue("--avatar-bg").trim() || "#f8fafc");
+      setFog(s.getPropertyValue("--avatar-fog").trim() || "#f8fafc");
+    };
+    update();
+    const obs = new MutationObserver(update);
+    obs.observe(document.documentElement, { attributes: true, attributeFilter: ["class"] });
+    return () => obs.disconnect();
+  }, []);
+
+  return { bg, fog };
 }
 
 export const SignAvatar = ({
@@ -287,16 +363,17 @@ export const SignAvatar = ({
   avatarUrl,
 }: SignAvatarProps) => {
   const url = avatarUrl?.trim() || DEFAULT_AVATAR_URL;
+  const { bg, fog } = useAvatarColors();
   return (
     <div className={`w-full h-full ${className}`}>
       <Canvas
         shadows
-        camera={{ position: compact ? [0, 0.1, 3.2] : [0, 0.2, 3.8], fov: compact ? 30 : 32 }}
+        camera={{ position: compact ? [0, 0.4, 3.4] : [0, 0.2, 3.8], fov: 32 }}
         dpr={[1, 2]}
         gl={{ antialias: true }}
       >
-        <color attach="background" args={["#f0f7ff"]} />
-        <fog attach="fog" args={["#f0f7ff", 4, 10]} />
+        <color attach="background" args={[bg]} />
+        <fog attach="fog" args={[fog, 4, 10]} />
 
         <ambientLight intensity={0.7} />
         <directionalLight
@@ -321,7 +398,7 @@ export const SignAvatar = ({
             enableZoom={false}
             minPolarAngle={Math.PI / 2.6}
             maxPolarAngle={Math.PI / 1.9}
-            target={[0, 0.1, 0]}
+            target={[0, 0.3, 0]}
           />
         )}
       </Canvas>

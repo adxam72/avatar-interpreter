@@ -6,12 +6,14 @@
  */
 
 export type HandPose = {
-  // Soddalashtirilgan qo'l holatlari (kelajakda 21 nuqta x,y,z bo'ladi)
   leftArm: { shoulder: number; elbow: number; wrist: number; rotation: number };
   rightArm: { shoulder: number; elbow: number; wrist: number; rotation: number };
   leftHand: HandShape;
   rightHand: HandShape;
   duration: number; // ms
+  face?: string;
+  head?: { x: number; y: number; z: number };
+  spine?: { x: number; y: number; z: number };
 };
 
 export type HandShape =
@@ -42,6 +44,7 @@ const WORD_DICTIONARY: Record<string, HandPose[]> = {
       leftHand: "open",
       rightHand: "open",
       duration: 600,
+      face: "smile",
     },
     {
       leftArm: { shoulder: 0, elbow: 0, wrist: 0, rotation: 0 },
@@ -49,6 +52,7 @@ const WORD_DICTIONARY: Record<string, HandPose[]> = {
       leftHand: "open",
       rightHand: "open",
       duration: 600,
+      face: "smile",
     },
   ],
   rahmat: [
@@ -58,6 +62,8 @@ const WORD_DICTIONARY: Record<string, HandPose[]> = {
       leftHand: "open",
       rightHand: "flat",
       duration: 500,
+      face: "smile",
+      head: { x: 0.1, y: 0, z: 0 },
     },
     {
       leftArm: { shoulder: 0, elbow: 0, wrist: 0, rotation: 0 },
@@ -65,6 +71,8 @@ const WORD_DICTIONARY: Record<string, HandPose[]> = {
       leftHand: "open",
       rightHand: "flat",
       duration: 700,
+      face: "smile",
+      head: { x: 0.15, y: 0, z: 0 },
     },
   ],
   ha: [
@@ -74,6 +82,8 @@ const WORD_DICTIONARY: Record<string, HandPose[]> = {
       leftHand: "open",
       rightHand: "fist",
       duration: 400,
+      face: "smile",
+      head: { x: 0.15, y: 0, z: 0 },
     },
     {
       leftArm: { shoulder: 0, elbow: 0, wrist: 0, rotation: 0 },
@@ -81,6 +91,8 @@ const WORD_DICTIONARY: Record<string, HandPose[]> = {
       leftHand: "open",
       rightHand: "fist",
       duration: 400,
+      face: "smile",
+      head: { x: 0.1, y: 0, z: 0 },
     },
   ],
   yoq: [
@@ -90,6 +102,8 @@ const WORD_DICTIONARY: Record<string, HandPose[]> = {
       leftHand: "open",
       rightHand: "point",
       duration: 400,
+      face: "sad",
+      head: { x: 0, y: -0.15, z: 0 },
     },
     {
       leftArm: { shoulder: 0, elbow: 0, wrist: 0, rotation: 0 },
@@ -97,6 +111,8 @@ const WORD_DICTIONARY: Record<string, HandPose[]> = {
       leftHand: "open",
       rightHand: "point",
       duration: 400,
+      face: "sad",
+      head: { x: 0, y: 0.15, z: 0 },
     },
   ],
   men: [
@@ -124,6 +140,7 @@ const WORD_DICTIONARY: Record<string, HandPose[]> = {
       leftHand: "open",
       rightHand: "thumb",
       duration: 800,
+      face: "smile",
     },
   ],
   sevaman: [
@@ -192,6 +209,7 @@ const WORD_DICTIONARY: Record<string, HandPose[]> = {
       leftHand: "claw",
       rightHand: "claw",
       duration: 500,
+      face: "question",
     },
     {
       leftArm: { shoulder: 0.8, elbow: 1.3, wrist: 0.2, rotation: 0 },
@@ -199,6 +217,7 @@ const WORD_DICTIONARY: Record<string, HandPose[]> = {
       leftHand: "claw",
       rightHand: "claw",
       duration: 500,
+      face: "question",
     },
   ],
   // ─── Kengaytirilgan lug'at ───
