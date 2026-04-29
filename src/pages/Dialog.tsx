@@ -361,7 +361,7 @@ const Dialog = () => {
             className="flex flex-col min-h-0 gap-2"
           >
             {/* Avatar display */}
-            <div className="glass-card rounded-2xl overflow-hidden flex-1 min-h-0 relative">
+            <div className="glass-card rounded-2xl overflow-hidden relative" style={{ minHeight: '500px', height: '65vh' }}>
               <SignAvatar
                 pose={player.currentPose}
                 avatarUrl={profile?.avatar_url || undefined}
