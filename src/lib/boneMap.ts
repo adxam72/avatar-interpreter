@@ -64,8 +64,10 @@ export function extractBones(root: THREE.Object3D): FullBoneMap {
   const map: FullBoneMap = {};
   const nameSet = new Set<string>(Object.values(BONE_NAMES));
   root.traverse((obj) => {
-    if ((obj as THREE.Bone).isBone && nameSet.has(obj.name)) {
-      map[obj.name as BoneName] = obj as THREE.Bone;
+    if (!(obj as THREE.Bone).isBone) return;
+    const name = obj.name.replace("mixamorig:", "");
+    if (nameSet.has(name)) {
+      map[name as BoneName] = obj as THREE.Bone;
     }
   });
   return map;

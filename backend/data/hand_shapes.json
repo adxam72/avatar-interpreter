@@ -1,0 +1,57 @@
+{
+  "version": "0.1.0",
+  "shapes": {
+    "fist": {
+      "description": "Barcha barmoqlar yig'ilgan",
+      "fingers": {"thumb": "closed", "index": "closed", "middle": "closed", "ring": "closed", "pinky": "closed"}
+    },
+    "open": {
+      "description": "Barcha barmoqlar ochiq",
+      "fingers": {"thumb": "open", "index": "open", "middle": "open", "ring": "open", "pinky": "open"}
+    },
+    "point": {
+      "description": "Faqat ko'rsatkich barmog'i ochiq",
+      "fingers": {"thumb": "closed", "index": "open", "middle": "closed", "ring": "closed", "pinky": "closed"}
+    },
+    "peace": {
+      "description": "Ko'rsatkich va o'rta barmog'i ochiq (V shakli)",
+      "fingers": {"thumb": "closed", "index": "open", "middle": "open", "ring": "closed", "pinky": "closed"}
+    },
+    "ok": {
+      "description": "Bosh barmog'i va ko'rsatkich halqa hosil qiladi",
+      "fingers": {"thumb": "touch_index", "index": "touch_thumb", "middle": "open", "ring": "open", "pinky": "open"}
+    },
+    "thumb": {
+      "description": "Faqat bosh barmog'i yuqoriga",
+      "fingers": {"thumb": "open", "index": "closed", "middle": "closed", "ring": "closed", "pinky": "closed"}
+    },
+    "rock": {
+      "description": "Ko'rsatkich, o'rta va bosh barmog'i ochiq",
+      "fingers": {"thumb": "open", "index": "open", "middle": "open", "ring": "closed", "pinky": "closed"}
+    },
+    "flat": {
+      "description": "Barcha barmoqlar tekis cho'zilgan",
+      "fingers": {"thumb": "flat", "index": "flat", "middle": "flat", "ring": "flat", "pinky": "flat"}
+    },
+    "claw": {
+      "description": "Barcha barmoqlar yarim bukilgan (tirnoq shakli)",
+      "fingers": {"thumb": "half", "index": "half", "middle": "half", "ring": "half", "pinky": "half"}
+    },
+    "pinch": {
+      "description": "Barcha barmoqlar uchlarida birlashgan",
+      "fingers": {"thumb": "pinch", "index": "pinch", "middle": "pinch", "ring": "pinch", "pinky": "pinch"}
+    },
+    "L": {
+      "description": "Bosh barmog'i va ko'rsatkich L shakli",
+      "fingers": {"thumb": "open", "index": "open", "middle": "closed", "ring": "closed", "pinky": "closed"}
+    },
+    "C": {
+      "description": "Barcha barmoqlar yarim ochiq C shakli",
+      "fingers": {"thumb": "half_open", "index": "half_open", "middle": "half_open", "ring": "half_open", "pinky": "half_open"}
+    },
+    "Y": {
+      "description": "Bosh barmog'i va jimjiloq ochiq",
+      "fingers": {"thumb": "open", "index": "closed", "middle": "closed", "ring": "closed", "pinky": "open"}
+    }
+  }
+}

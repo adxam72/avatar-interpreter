@@ -6,8 +6,7 @@ import { HandPose, REST_POSE } from "@/lib/signEngine";
 import { extractBones, extractMorphTargets, FullBoneMap, MorphTargetMap } from "@/lib/boneMap";
 import { HAND_SHAPES, type HandFingerPose, FACE_PRESETS, type FacialExpression } from "@/lib/handShapes";
 
-const DEFAULT_AVATAR_URL =
-  "https://models.readyplayer.me/64bfa15f0e72c63d7c3934a6.glb?morphTargets=ARKit&textureAtlas=1024";
+const DEFAULT_AVATAR_URL = "/Remy_upper.glb";
 
 function lerp(a: number, b: number, t: number) {
   return a + (b - a) * t;
@@ -83,6 +82,9 @@ function applyMorphTargets(
   }
 }
 
+// Clipping plane — beldan pastini kesadi (world space da Y=-0.15 dan past)
+const clipPlane = new THREE.Plane(new THREE.Vector3(0, 1, 0), 0.15);
+
 function ReadyPlayerMeAvatar({ pose, url }: { pose: HandPose; url: string }) {
   const { scene } = useGLTF(url);
   const bonesRef = useRef<FullBoneMap>({});
@@ -101,10 +103,29 @@ function ReadyPlayerMeAvatar({ pose, url }: { pose: HandPose; url: string }) {
   const cloned = useMemo(() => {
     const c = scene.clone(true);
     c.traverse((obj) => {
+      // Mixamo suyak nomlaridan "mixamorig:" prefiksini olib tashlash
+      if ((obj as any).isBone) {
+        obj.name = obj.name.replace("mixamorig:", "");
+      }
       if ((obj as THREE.Mesh).isMesh) {
         const m = obj as THREE.Mesh;
         m.castShadow = true;
         m.receiveShadow = true;
+        // Har bir materialga clipping plane qo'shish
+        if (Array.isArray(m.material)) {
+          m.material = m.material.map((mat) => {
+            const newMat = mat.clone();
+            newMat.clippingPlanes = [clipPlane];
+            newMat.clipShadows = true;
+            newMat.side = THREE.DoubleSide;
+            return newMat;
+          });
+        } else if (m.material) {
+          m.material = (m.material as THREE.Material).clone();
+          (m.material as any).clippingPlanes = [clipPlane];
+          (m.material as any).clipShadows = true;
+          (m.material as any).side = THREE.DoubleSide;
+        }
       }
     });
     const bones = extractBones(c);
@@ -201,7 +222,9 @@ function ReadyPlayerMeAvatar({ pose, url }: { pose: HandPose; url: string }) {
     applyMorphTargets(morphRef.current, faceTarget, faceCur.current, t * 0.7);
   });
 
-  return <primitive object={cloned} position={[0, -1.35, 0]} />;
+  // scale=0.012: Mixamo cm -> Three.js m (175cm * 0.012 = 2.1 units)
+  // position Y=-1.5: oyoqlar pastga tushadi, bel Y≈-0.3, ko'krak Y≈0.12, bosh Y≈0.48
+  return <primitive object={cloned} scale={0.012} position={[0, -1.5, 0]} />;
 }
 
 function StylizedAvatar({ pose }: { pose: HandPose }) {
@@ -368,21 +391,23 @@ export const SignAvatar = ({
     <div className={`w-full h-full ${className}`}>
       <Canvas
         shadows
-        camera={{ position: compact ? [0, 0.4, 3.4] : [0, 0.2, 3.8], fov: 32 }}
+        camera={{ position: [0, 0.35, 1.6], fov: 35 }}
         dpr={[1, 2]}
-        gl={{ antialias: true }}
+        gl={{ antialias: true, localClippingEnabled: true }}
       >
         <color attach="background" args={[bg]} />
-        <fog attach="fog" args={[fog, 4, 10]} />
+        <fog attach="fog" args={[fog, 3, 8]} />
 
-        <ambientLight intensity={0.7} />
+        <ambientLight intensity={0.6} />
         <directionalLight
-          position={[3, 5, 3]}
-          intensity={1.1}
+          position={[5, 8, 3]}
+          intensity={1.8}
           castShadow
           shadow-mapSize={[1024, 1024]}
         />
-        <directionalLight position={[-3, 2, -2]} intensity={0.3} color="#3b82f6" />
+        <directionalLight position={[-4, 4, -3]} intensity={0.4} color="#b0c4de" />
+        <directionalLight position={[0, -2, -4]} intensity={0.2} color="#ffeedd" />
+        <hemisphereLight args={["#b1e1ff", "#b97a20", 0.3]} />
 
         <AvatarErrorBoundary fallback={<StylizedAvatar pose={pose} />}>
           <Suspense fallback={<Loader />}>
@@ -390,7 +415,7 @@ export const SignAvatar = ({
           </Suspense>
         </AvatarErrorBoundary>
 
-        <ContactShadows position={[0, -1.35, 0]} opacity={0.35} scale={3} blur={2.4} />
+        <ContactShadows position={[0, -1.5, 0]} opacity={0.35} scale={3} blur={2.4} />
 
         {showControls && (
           <OrbitControls
@@ -398,7 +423,7 @@ export const SignAvatar = ({
             enableZoom={false}
             minPolarAngle={Math.PI / 2.6}
             maxPolarAngle={Math.PI / 1.9}
-            target={[0, 0.3, 0]}
+            target={[0, 0.2, 0]}
           />
         )}
       </Canvas>

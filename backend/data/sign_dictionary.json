@@ -1,0 +1,652 @@
+{
+  "version": "0.1.0",
+  "language": "uz",
+  "words": [
+    {
+      "word": "salom",
+      "category": "greeting",
+      "hand_mode": "one_hand",
+      "poses": [
+        {
+          "leftArm": {"shoulder": 0, "elbow": 0, "wrist": 0, "rotation": 0},
+          "rightArm": {"shoulder": 1.2, "elbow": 1.5, "wrist": 0.3, "rotation": 0.5},
+          "leftHand": "open", "rightHand": "open", "duration": 600, "face": "smile"
+        },
+        {
+          "leftArm": {"shoulder": 0, "elbow": 0, "wrist": 0, "rotation": 0},
+          "rightArm": {"shoulder": 1.4, "elbow": 1.3, "wrist": -0.3, "rotation": -0.5},
+          "leftHand": "open", "rightHand": "open", "duration": 600, "face": "smile"
+        }
+      ]
+    },
+    {
+      "word": "rahmat",
+      "category": "greeting",
+      "hand_mode": "one_hand",
+      "poses": [
+        {
+          "leftArm": {"shoulder": 0, "elbow": 0, "wrist": 0, "rotation": 0},
+          "rightArm": {"shoulder": 0.8, "elbow": 1.8, "wrist": 0, "rotation": 0},
+          "leftHand": "open", "rightHand": "flat", "duration": 500, "face": "smile",
+          "head": {"x": 0.1, "y": 0, "z": 0}
+        },
+        {
+          "leftArm": {"shoulder": 0, "elbow": 0, "wrist": 0, "rotation": 0},
+          "rightArm": {"shoulder": 1.1, "elbow": 1.2, "wrist": 0.5, "rotation": 0},
+          "leftHand": "open", "rightHand": "flat", "duration": 700, "face": "smile",
+          "head": {"x": 0.15, "y": 0, "z": 0}
+        }
+      ]
+    },
+    {
+      "word": "ha",
+      "category": "common",
+      "hand_mode": "one_hand",
+      "poses": [
+        {
+          "leftArm": {"shoulder": 0, "elbow": 0, "wrist": 0, "rotation": 0},
+          "rightArm": {"shoulder": 0.5, "elbow": 1.5, "wrist": 0, "rotation": 0},
+          "leftHand": "open", "rightHand": "fist", "duration": 400, "face": "smile",
+          "head": {"x": 0.15, "y": 0, "z": 0}
+        },
+        {
+          "leftArm": {"shoulder": 0, "elbow": 0, "wrist": 0, "rotation": 0},
+          "rightArm": {"shoulder": 0.5, "elbow": 1.7, "wrist": 0, "rotation": 0},
+          "leftHand": "open", "rightHand": "fist", "duration": 400, "face": "smile",
+          "head": {"x": 0.1, "y": 0, "z": 0}
+        }
+      ]
+    },
+    {
+      "word": "yoq",
+      "category": "common",
+      "hand_mode": "one_hand",
+      "poses": [
+        {
+          "leftArm": {"shoulder": 0, "elbow": 0, "wrist": 0, "rotation": 0},
+          "rightArm": {"shoulder": 0.7, "elbow": 1.5, "wrist": 0, "rotation": 0.5},
+          "leftHand": "open", "rightHand": "point", "duration": 400, "face": "sad",
+          "head": {"x": 0, "y": -0.15, "z": 0}
+        },
+        {
+          "leftArm": {"shoulder": 0, "elbow": 0, "wrist": 0, "rotation": 0},
+          "rightArm": {"shoulder": 0.7, "elbow": 1.5, "wrist": 0, "rotation": -0.5},
+          "leftHand": "open", "rightHand": "point", "duration": 400, "face": "sad",
+          "head": {"x": 0, "y": 0.15, "z": 0}
+        }
+      ]
+    },
+    {
+      "word": "men",
+      "category": "pronoun",
+      "hand_mode": "one_hand",
+      "poses": [
+        {
+          "leftArm": {"shoulder": 0, "elbow": 0, "wrist": 0, "rotation": 0},
+          "rightArm": {"shoulder": 0.3, "elbow": 2.2, "wrist": 0, "rotation": 0},
+          "leftHand": "open", "rightHand": "point", "duration": 700
+        }
+      ]
+    },
+    {
+      "word": "sen",
+      "category": "pronoun",
+      "hand_mode": "one_hand",
+      "poses": [
+        {
+          "leftArm": {"shoulder": 0, "elbow": 0, "wrist": 0, "rotation": 0},
+          "rightArm": {"shoulder": 1.2, "elbow": 0.5, "wrist": 0, "rotation": 0},
+          "leftHand": "open", "rightHand": "point", "duration": 700
+        }
+      ]
+    },
+    {
+      "word": "yaxshi",
+      "category": "adjective",
+      "hand_mode": "one_hand",
+      "poses": [
+        {
+          "leftArm": {"shoulder": 0, "elbow": 0, "wrist": 0, "rotation": 0},
+          "rightArm": {"shoulder": 0.8, "elbow": 1.7, "wrist": 0, "rotation": 0},
+          "leftHand": "open", "rightHand": "thumb", "duration": 800, "face": "smile"
+        }
+      ]
+    },
+    {
+      "word": "sevaman",
+      "category": "emotion",
+      "hand_mode": "two_hand",
+      "poses": [
+        {
+          "leftArm": {"shoulder": 0.6, "elbow": 1.5, "wrist": 0, "rotation": 0},
+          "rightArm": {"shoulder": 0.6, "elbow": 1.5, "wrist": 0, "rotation": 0},
+          "leftHand": "fist", "rightHand": "fist", "duration": 600
+        },
+        {
+          "leftArm": {"shoulder": 0.6, "elbow": 1.4, "wrist": 0, "rotation": 0},
+          "rightArm": {"shoulder": 0.6, "elbow": 1.4, "wrist": 0, "rotation": 0},
+          "leftHand": "open", "rightHand": "open", "duration": 600
+        }
+      ]
+    },
+    {
+      "word": "bugun",
+      "category": "time",
+      "hand_mode": "two_hand",
+      "poses": [
+        {
+          "leftArm": {"shoulder": 0.5, "elbow": 1.5, "wrist": 0, "rotation": 0},
+          "rightArm": {"shoulder": 0.5, "elbow": 1.5, "wrist": 0, "rotation": 0},
+          "leftHand": "thumb", "rightHand": "thumb", "duration": 500
+        },
+        {
+          "leftArm": {"shoulder": 0.7, "elbow": 1.3, "wrist": 0, "rotation": 0},
+          "rightArm": {"shoulder": 0.7, "elbow": 1.3, "wrist": 0, "rotation": 0},
+          "leftHand": "thumb", "rightHand": "thumb", "duration": 500
+        }
+      ]
+    },
+    {
+      "word": "uy",
+      "category": "place",
+      "hand_mode": "two_hand",
+      "poses": [
+        {
+          "leftArm": {"shoulder": 0.8, "elbow": 1.4, "wrist": 0.3, "rotation": 0},
+          "rightArm": {"shoulder": 0.8, "elbow": 1.4, "wrist": -0.3, "rotation": 0},
+          "leftHand": "flat", "rightHand": "flat", "duration": 800
+        }
+      ]
+    },
+    {
+      "word": "ota",
+      "category": "family",
+      "hand_mode": "one_hand",
+      "poses": [
+        {
+          "leftArm": {"shoulder": 0, "elbow": 0, "wrist": 0, "rotation": 0},
+          "rightArm": {"shoulder": 0.4, "elbow": 2.5, "wrist": 0, "rotation": 0},
+          "leftHand": "open", "rightHand": "open", "duration": 700
+        }
+      ]
+    },
+    {
+      "word": "ona",
+      "category": "family",
+      "hand_mode": "one_hand",
+      "poses": [
+        {
+          "leftArm": {"shoulder": 0, "elbow": 0, "wrist": 0, "rotation": 0},
+          "rightArm": {"shoulder": 0.6, "elbow": 2.2, "wrist": 0, "rotation": 0.3},
+          "leftHand": "open", "rightHand": "open", "duration": 700
+        }
+      ]
+    },
+    {
+      "word": "qanday",
+      "category": "question",
+      "hand_mode": "two_hand",
+      "poses": [
+        {
+          "leftArm": {"shoulder": 0.6, "elbow": 1.5, "wrist": 0, "rotation": 0},
+          "rightArm": {"shoulder": 0.6, "elbow": 1.5, "wrist": 0, "rotation": 0},
+          "leftHand": "claw", "rightHand": "claw", "duration": 500, "face": "question"
+        },
+        {
+          "leftArm": {"shoulder": 0.8, "elbow": 1.3, "wrist": 0.2, "rotation": 0},
+          "rightArm": {"shoulder": 0.8, "elbow": 1.3, "wrist": -0.2, "rotation": 0},
+          "leftHand": "claw", "rightHand": "claw", "duration": 500, "face": "question"
+        }
+      ]
+    },
+    {
+      "word": "kun",
+      "category": "time",
+      "hand_mode": "one_hand",
+      "poses": [
+        {
+          "leftArm": {"shoulder": 0, "elbow": 0, "wrist": 0, "rotation": 0},
+          "rightArm": {"shoulder": 1.4, "elbow": 0.3, "wrist": 0, "rotation": 0},
+          "leftHand": "open", "rightHand": "C", "duration": 700
+        }
+      ]
+    },
+    {
+      "word": "tun",
+      "category": "time",
+      "hand_mode": "two_hand",
+      "poses": [
+        {
+          "leftArm": {"shoulder": 0.6, "elbow": 1.5, "wrist": 0, "rotation": 0},
+          "rightArm": {"shoulder": 0.6, "elbow": 1.5, "wrist": 0, "rotation": 0},
+          "leftHand": "flat", "rightHand": "flat", "duration": 700
+        }
+      ]
+    },
+    {
+      "word": "bola",
+      "category": "family",
+      "hand_mode": "one_hand",
+      "poses": [
+        {
+          "leftArm": {"shoulder": 0, "elbow": 0, "wrist": 0, "rotation": 0},
+          "rightArm": {"shoulder": 0.5, "elbow": 1.2, "wrist": -0.3, "rotation": 0},
+          "leftHand": "open", "rightHand": "flat", "duration": 600
+        }
+      ]
+    },
+    {
+      "word": "suv",
+      "category": "food",
+      "hand_mode": "one_hand",
+      "poses": [
+        {
+          "leftArm": {"shoulder": 0, "elbow": 0, "wrist": 0, "rotation": 0},
+          "rightArm": {"shoulder": 0.7, "elbow": 1.6, "wrist": 0, "rotation": 0},
+          "leftHand": "open", "rightHand": "peace", "duration": 500
+        },
+        {
+          "leftArm": {"shoulder": 0, "elbow": 0, "wrist": 0, "rotation": 0},
+          "rightArm": {"shoulder": 0.9, "elbow": 1.4, "wrist": 0, "rotation": 0},
+          "leftHand": "open", "rightHand": "peace", "duration": 500
+        }
+      ]
+    },
+    {
+      "word": "non",
+      "category": "food",
+      "hand_mode": "two_hand",
+      "poses": [
+        {
+          "leftArm": {"shoulder": 0.6, "elbow": 1.4, "wrist": 0, "rotation": 0},
+          "rightArm": {"shoulder": 0.6, "elbow": 1.6, "wrist": 0, "rotation": 0},
+          "leftHand": "flat", "rightHand": "flat", "duration": 700
+        }
+      ]
+    },
+    {
+      "word": "maktab",
+      "category": "place",
+      "hand_mode": "two_hand",
+      "poses": [
+        {
+          "leftArm": {"shoulder": 0.5, "elbow": 1.5, "wrist": 0, "rotation": 0},
+          "rightArm": {"shoulder": 0.5, "elbow": 1.7, "wrist": 0, "rotation": 0},
+          "leftHand": "flat", "rightHand": "flat", "duration": 500
+        },
+        {
+          "leftArm": {"shoulder": 0.5, "elbow": 1.5, "wrist": 0, "rotation": 0},
+          "rightArm": {"shoulder": 0.5, "elbow": 1.5, "wrist": 0, "rotation": 0},
+          "leftHand": "flat", "rightHand": "flat", "duration": 500
+        }
+      ]
+    },
+    {
+      "word": "kitob",
+      "category": "object",
+      "hand_mode": "two_hand",
+      "poses": [
+        {
+          "leftArm": {"shoulder": 0.5, "elbow": 1.5, "wrist": 0, "rotation": 0},
+          "rightArm": {"shoulder": 0.5, "elbow": 1.5, "wrist": 0, "rotation": 0},
+          "leftHand": "flat", "rightHand": "flat", "duration": 600
+        },
+        {
+          "leftArm": {"shoulder": 0.5, "elbow": 1.5, "wrist": 0.4, "rotation": 0},
+          "rightArm": {"shoulder": 0.5, "elbow": 1.5, "wrist": -0.4, "rotation": 0},
+          "leftHand": "flat", "rightHand": "flat", "duration": 600
+        }
+      ]
+    },
+    {
+      "word": "dost",
+      "category": "social",
+      "hand_mode": "two_hand",
+      "poses": [
+        {
+          "leftArm": {"shoulder": 0.5, "elbow": 1.6, "wrist": 0, "rotation": 0},
+          "rightArm": {"shoulder": 0.5, "elbow": 1.6, "wrist": 0, "rotation": 0},
+          "leftHand": "point", "rightHand": "point", "duration": 700
+        }
+      ]
+    },
+    {
+      "word": "ish",
+      "category": "action",
+      "hand_mode": "two_hand",
+      "poses": [
+        {
+          "leftArm": {"shoulder": 0.5, "elbow": 1.5, "wrist": 0, "rotation": 0},
+          "rightArm": {"shoulder": 0.5, "elbow": 1.5, "wrist": 0, "rotation": 0},
+          "leftHand": "fist", "rightHand": "fist", "duration": 400
+        },
+        {
+          "leftArm": {"shoulder": 0.5, "elbow": 1.6, "wrist": 0, "rotation": 0},
+          "rightArm": {"shoulder": 0.5, "elbow": 1.4, "wrist": 0, "rotation": 0},
+          "leftHand": "fist", "rightHand": "fist", "duration": 400
+        }
+      ]
+    },
+    {
+      "word": "vaqt",
+      "category": "time",
+      "hand_mode": "one_hand",
+      "poses": [
+        {
+          "leftArm": {"shoulder": 0, "elbow": 0, "wrist": 0, "rotation": 0},
+          "rightArm": {"shoulder": 0.5, "elbow": 1.7, "wrist": 0, "rotation": 0},
+          "leftHand": "flat", "rightHand": "point", "duration": 700
+        }
+      ]
+    },
+    {
+      "word": "ovqat",
+      "category": "food",
+      "hand_mode": "one_hand",
+      "poses": [
+        {
+          "leftArm": {"shoulder": 0, "elbow": 0, "wrist": 0, "rotation": 0},
+          "rightArm": {"shoulder": 0.6, "elbow": 2, "wrist": 0, "rotation": 0},
+          "leftHand": "open", "rightHand": "pinch", "duration": 500
+        },
+        {
+          "leftArm": {"shoulder": 0, "elbow": 0, "wrist": 0, "rotation": 0},
+          "rightArm": {"shoulder": 0.5, "elbow": 2.2, "wrist": 0, "rotation": 0},
+          "leftHand": "open", "rightHand": "pinch", "duration": 500
+        }
+      ]
+    },
+    {
+      "word": "ichmoq",
+      "category": "action",
+      "hand_mode": "one_hand",
+      "poses": [
+        {
+          "leftArm": {"shoulder": 0, "elbow": 0, "wrist": 0, "rotation": 0},
+          "rightArm": {"shoulder": 0.5, "elbow": 2.1, "wrist": 0, "rotation": 0.3},
+          "leftHand": "open", "rightHand": "C", "duration": 700
+        }
+      ]
+    },
+    {
+      "word": "uxlamoq",
+      "category": "action",
+      "hand_mode": "one_hand",
+      "poses": [
+        {
+          "leftArm": {"shoulder": 0, "elbow": 0, "wrist": 0, "rotation": 0},
+          "rightArm": {"shoulder": 0.4, "elbow": 2.3, "wrist": 0, "rotation": 0},
+          "leftHand": "open", "rightHand": "flat", "duration": 800
+        }
+      ]
+    },
+    {
+      "word": "yurmoq",
+      "category": "action",
+      "hand_mode": "two_hand",
+      "poses": [
+        {
+          "leftArm": {"shoulder": 0.4, "elbow": 1.5, "wrist": 0, "rotation": 0},
+          "rightArm": {"shoulder": 0.4, "elbow": 1.5, "wrist": 0, "rotation": 0},
+          "leftHand": "point", "rightHand": "point", "duration": 400
+        },
+        {
+          "leftArm": {"shoulder": 0.5, "elbow": 1.4, "wrist": 0, "rotation": 0},
+          "rightArm": {"shoulder": 0.3, "elbow": 1.6, "wrist": 0, "rotation": 0},
+          "leftHand": "point", "rightHand": "point", "duration": 400
+        }
+      ]
+    },
+    {
+      "word": "kelmoq",
+      "category": "action",
+      "hand_mode": "one_hand",
+      "poses": [
+        {
+          "leftArm": {"shoulder": 0, "elbow": 0, "wrist": 0, "rotation": 0},
+          "rightArm": {"shoulder": 1.2, "elbow": 1, "wrist": 0, "rotation": 0},
+          "leftHand": "open", "rightHand": "open", "duration": 500
+        },
+        {
+          "leftArm": {"shoulder": 0, "elbow": 0, "wrist": 0, "rotation": 0},
+          "rightArm": {"shoulder": 0.5, "elbow": 1.8, "wrist": 0, "rotation": 0},
+          "leftHand": "open", "rightHand": "claw", "duration": 500
+        }
+      ]
+    },
+    {
+      "word": "ketmoq",
+      "category": "action",
+      "hand_mode": "one_hand",
+      "poses": [
+        {
+          "leftArm": {"shoulder": 0, "elbow": 0, "wrist": 0, "rotation": 0},
+          "rightArm": {"shoulder": 0.5, "elbow": 1.8, "wrist": 0, "rotation": 0},
+          "leftHand": "open", "rightHand": "open", "duration": 500
+        },
+        {
+          "leftArm": {"shoulder": 0, "elbow": 0, "wrist": 0, "rotation": 0},
+          "rightArm": {"shoulder": 1.3, "elbow": 0.8, "wrist": 0, "rotation": 0.5},
+          "leftHand": "open", "rightHand": "flat", "duration": 500
+        }
+      ]
+    },
+    {
+      "word": "ko_rmoq",
+      "category": "action",
+      "hand_mode": "one_hand",
+      "poses": [
+        {
+          "leftArm": {"shoulder": 0, "elbow": 0, "wrist": 0, "rotation": 0},
+          "rightArm": {"shoulder": 0.5, "elbow": 2, "wrist": 0, "rotation": 0},
+          "leftHand": "open", "rightHand": "peace", "duration": 700
+        }
+      ]
+    },
+    {
+      "word": "eshitmoq",
+      "category": "action",
+      "hand_mode": "one_hand",
+      "poses": [
+        {
+          "leftArm": {"shoulder": 0, "elbow": 0, "wrist": 0, "rotation": 0},
+          "rightArm": {"shoulder": 0.3, "elbow": 2.4, "wrist": 0, "rotation": 0},
+          "leftHand": "open", "rightHand": "C", "duration": 700
+        }
+      ]
+    },
+    {
+      "word": "gapirmoq",
+      "category": "action",
+      "hand_mode": "one_hand",
+      "poses": [
+        {
+          "leftArm": {"shoulder": 0, "elbow": 0, "wrist": 0, "rotation": 0},
+          "rightArm": {"shoulder": 0.4, "elbow": 2.3, "wrist": 0, "rotation": 0},
+          "leftHand": "open", "rightHand": "claw", "duration": 400
+        },
+        {
+          "leftArm": {"shoulder": 0, "elbow": 0, "wrist": 0, "rotation": 0},
+          "rightArm": {"shoulder": 0.5, "elbow": 2.1, "wrist": 0, "rotation": 0},
+          "leftHand": "open", "rightHand": "open", "duration": 400
+        }
+      ]
+    },
+    {
+      "word": "yaxshimisiz",
+      "category": "greeting",
+      "hand_mode": "two_hand",
+      "poses": [
+        {
+          "leftArm": {"shoulder": 0.6, "elbow": 1.5, "wrist": 0, "rotation": 0},
+          "rightArm": {"shoulder": 0.6, "elbow": 1.5, "wrist": 0, "rotation": 0},
+          "leftHand": "claw", "rightHand": "claw", "duration": 500
+        },
+        {
+          "leftArm": {"shoulder": 0, "elbow": 0, "wrist": 0, "rotation": 0},
+          "rightArm": {"shoulder": 0.8, "elbow": 1.6, "wrist": 0, "rotation": 0},
+          "leftHand": "open", "rightHand": "thumb", "duration": 600
+        }
+      ]
+    },
+    {
+      "word": "xayr",
+      "category": "greeting",
+      "hand_mode": "one_hand",
+      "poses": [
+        {
+          "leftArm": {"shoulder": 0, "elbow": 0, "wrist": 0, "rotation": 0},
+          "rightArm": {"shoulder": 1.4, "elbow": 0.5, "wrist": 0.3, "rotation": 0},
+          "leftHand": "open", "rightHand": "open", "duration": 500
+        },
+        {
+          "leftArm": {"shoulder": 0, "elbow": 0, "wrist": 0, "rotation": 0},
+          "rightArm": {"shoulder": 1.4, "elbow": 0.5, "wrist": -0.3, "rotation": 0},
+          "leftHand": "open", "rightHand": "open", "duration": 500
+        }
+      ]
+    },
+    {
+      "word": "iltimos",
+      "category": "common",
+      "hand_mode": "one_hand",
+      "poses": [
+        {
+          "leftArm": {"shoulder": 0, "elbow": 0, "wrist": 0, "rotation": 0},
+          "rightArm": {"shoulder": 0.5, "elbow": 1.7, "wrist": 0, "rotation": 0},
+          "leftHand": "open", "rightHand": "flat", "duration": 400
+        },
+        {
+          "leftArm": {"shoulder": 0, "elbow": 0, "wrist": 0, "rotation": 0},
+          "rightArm": {"shoulder": 0.7, "elbow": 1.5, "wrist": 0.3, "rotation": 0},
+          "leftHand": "open", "rightHand": "flat", "duration": 600
+        }
+      ]
+    },
+    {
+      "word": "kechirim",
+      "category": "common",
+      "hand_mode": "two_hand",
+      "poses": [
+        {
+          "leftArm": {"shoulder": 0.5, "elbow": 1.5, "wrist": 0, "rotation": 0},
+          "rightArm": {"shoulder": 0.5, "elbow": 1.5, "wrist": 0, "rotation": 0},
+          "leftHand": "fist", "rightHand": "fist", "duration": 700
+        }
+      ]
+    },
+    {
+      "word": "yordam",
+      "category": "common",
+      "hand_mode": "two_hand",
+      "poses": [
+        {
+          "leftArm": {"shoulder": 0.5, "elbow": 1.4, "wrist": 0, "rotation": 0},
+          "rightArm": {"shoulder": 0.5, "elbow": 1.6, "wrist": 0, "rotation": 0},
+          "leftHand": "fist", "rightHand": "flat", "duration": 700
+        }
+      ]
+    },
+    {
+      "word": "katta",
+      "category": "adjective",
+      "hand_mode": "two_hand",
+      "poses": [
+        {
+          "leftArm": {"shoulder": 0.6, "elbow": 1.3, "wrist": 0, "rotation": 0},
+          "rightArm": {"shoulder": 0.6, "elbow": 1.3, "wrist": 0, "rotation": 0},
+          "leftHand": "C", "rightHand": "C", "duration": 400
+        },
+        {
+          "leftArm": {"shoulder": 0.9, "elbow": 0.8, "wrist": 0, "rotation": 0.3},
+          "rightArm": {"shoulder": 0.9, "elbow": 0.8, "wrist": 0, "rotation": -0.3},
+          "leftHand": "C", "rightHand": "C", "duration": 600
+        }
+      ]
+    },
+    {
+      "word": "kichik",
+      "category": "adjective",
+      "hand_mode": "two_hand",
+      "poses": [
+        {
+          "leftArm": {"shoulder": 0.5, "elbow": 1.6, "wrist": 0, "rotation": 0},
+          "rightArm": {"shoulder": 0.5, "elbow": 1.6, "wrist": 0, "rotation": 0},
+          "leftHand": "pinch", "rightHand": "pinch", "duration": 700
+        }
+      ]
+    },
+    {
+      "word": "issiq",
+      "category": "adjective",
+      "hand_mode": "one_hand",
+      "poses": [
+        {
+          "leftArm": {"shoulder": 0, "elbow": 0, "wrist": 0, "rotation": 0},
+          "rightArm": {"shoulder": 0.5, "elbow": 1.6, "wrist": 0, "rotation": 0},
+          "leftHand": "open", "rightHand": "claw", "duration": 700
+        }
+      ]
+    },
+    {
+      "word": "sovuq",
+      "category": "adjective",
+      "hand_mode": "two_hand",
+      "poses": [
+        {
+          "leftArm": {"shoulder": 0.6, "elbow": 1.5, "wrist": 0, "rotation": 0},
+          "rightArm": {"shoulder": 0.6, "elbow": 1.5, "wrist": 0, "rotation": 0},
+          "leftHand": "fist", "rightHand": "fist", "duration": 700
+        }
+      ]
+    },
+    {
+      "word": "bir",
+      "category": "number",
+      "hand_mode": "one_hand",
+      "poses": [
+        {
+          "leftArm": {"shoulder": 0, "elbow": 0, "wrist": 0, "rotation": 0},
+          "rightArm": {"shoulder": 0.5, "elbow": 1.8, "wrist": 0, "rotation": 0},
+          "leftHand": "open", "rightHand": "point", "duration": 500
+        }
+      ]
+    },
+    {
+      "word": "ikki",
+      "category": "number",
+      "hand_mode": "one_hand",
+      "poses": [
+        {
+          "leftArm": {"shoulder": 0, "elbow": 0, "wrist": 0, "rotation": 0},
+          "rightArm": {"shoulder": 0.5, "elbow": 1.8, "wrist": 0, "rotation": 0},
+          "leftHand": "open", "rightHand": "peace", "duration": 500
+        }
+      ]
+    },
+    {
+      "word": "uch",
+      "category": "number",
+      "hand_mode": "one_hand",
+      "poses": [
+        {
+          "leftArm": {"shoulder": 0, "elbow": 0, "wrist": 0, "rotation": 0},
+          "rightArm": {"shoulder": 0.5, "elbow": 1.8, "wrist": 0, "rotation": 0},
+          "leftHand": "open", "rightHand": "rock", "duration": 500
+        }
+      ]
+    },
+    {
+      "word": "besh",
+      "category": "number",
+      "hand_mode": "one_hand",
+      "poses": [
+        {
+          "leftArm": {"shoulder": 0, "elbow": 0, "wrist": 0, "rotation": 0},
+          "rightArm": {"shoulder": 0.5, "elbow": 1.8, "wrist": 0, "rotation": 0},
+          "leftHand": "open", "rightHand": "open", "duration": 500
+        }
+      ]
+    }
+  ]
+}
