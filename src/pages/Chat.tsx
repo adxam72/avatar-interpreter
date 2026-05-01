@@ -403,7 +403,7 @@ const Chat = () => {
                 className="bg-background rounded-3xl overflow-hidden max-w-md w-full aspect-square relative"
                 onClick={(e) => e.stopPropagation()}
               >
-                <SignAvatar pose={player.currentPose} avatarUrl={profile?.avatar_url || undefined} compact showControls />
+                <SignAvatar pose={player.currentPose} avatarUrl={profile?.avatar_url || undefined} compact />
                 <div className="absolute bottom-4 left-4 right-4 glass px-4 py-3 rounded-2xl text-center">
                   <div className="text-xs text-muted-foreground mb-1">Tarjima qilinyapti</div>
                   <div className="font-medium text-sm">"{player.currentWord || "..."}"</div>

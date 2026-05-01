@@ -365,7 +365,6 @@ const Dialog = () => {
               <SignAvatar
                 pose={player.currentPose}
                 avatarUrl={profile?.avatar_url || undefined}
-                showControls
               />
 
               <div className="absolute top-3 left-3 right-3 flex justify-between items-start pointer-events-none">
@@ -485,7 +484,6 @@ const Dialog = () => {
             <SignAvatar
               pose={player.currentPose}
               avatarUrl={profile?.avatar_url || undefined}
-              showControls
             />
 
             <div className="absolute top-2 left-2 right-2 flex justify-between items-start pointer-events-none">

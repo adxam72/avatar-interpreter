@@ -1,12 +1,12 @@
 import { Component, ReactNode, Suspense, useEffect, useMemo, useRef, useState } from "react";
-import { Canvas, useFrame } from "@react-three/fiber";
-import { OrbitControls, ContactShadows, useGLTF, Html } from "@react-three/drei";
+import { Canvas, useFrame, useThree } from "@react-three/fiber";
+import { ContactShadows, useGLTF, Html } from "@react-three/drei";
 import * as THREE from "three";
 import { HandPose, REST_POSE } from "@/lib/signEngine";
 import { extractBones, extractMorphTargets, FullBoneMap, MorphTargetMap } from "@/lib/boneMap";
 import { HAND_SHAPES, type HandFingerPose, FACE_PRESETS, type FacialExpression } from "@/lib/handShapes";
 
-const DEFAULT_AVATAR_URL = "/Remy_halfbody.glb";
+const DEFAULT_AVATAR_URL = "/Remy_final.glb";
 
 function lerp(a: number, b: number, t: number) {
   return a + (b - a) * t;
@@ -82,7 +82,8 @@ function applyMorphTargets(
   }
 }
 
-// Beldan pastdagi geometriya GLB fayldan fizik olib tashlangan
+// Clipping plane — beldan pastini kesadi (world space da Y=-0.15 dan past)
+// beldan past GLBdan olib tashlangan
 
 function ReadyPlayerMeAvatar({ pose, url }: { pose: HandPose; url: string }) {
   const { scene } = useGLTF(url);
@@ -110,6 +111,21 @@ function ReadyPlayerMeAvatar({ pose, url }: { pose: HandPose; url: string }) {
         const m = obj as THREE.Mesh;
         m.castShadow = true;
         m.receiveShadow = true;
+        // Har bir materialga clipping plane qo'shish
+        if (Array.isArray(m.material)) {
+          m.material = m.material.map((mat) => {
+            const newMat = mat.clone();
+            
+            
+            
+            return newMat;
+          });
+        } else if (m.material) {
+          m.material = (m.material as THREE.Material).clone();
+          
+          
+          
+        }
       }
     });
     const bones = extractBones(c);
@@ -206,9 +222,9 @@ function ReadyPlayerMeAvatar({ pose, url }: { pose: HandPose; url: string }) {
     applyMorphTargets(morphRef.current, faceTarget, faceCur.current, t * 0.7);
   });
 
-  // Model: Y=1.9 (bel) dan Y=3.74 (bosh tepasi) gacha
-  // Position: modelni markazlash uchun Y=-2.8 ga tushirish
-  return <primitive object={cloned} scale={0.25} position={[0, -0.6, 0]} />;
+  // scale=0.012: Mixamo cm -> Three.js m (175cm * 0.012 = 2.1 units)
+  // position Y=-1.5: oyoqlar pastga tushadi, bel Y≈-0.3, ko'krak Y≈0.12, bosh Y≈0.48
+  return <primitive object={cloned} scale={1} position={[0, 0, 0]} rotation={[0, Math.PI, 0]} />;
 }
 
 function StylizedAvatar({ pose }: { pose: HandPose }) {
@@ -327,6 +343,54 @@ class AvatarErrorBoundary extends Component<
   }
 }
 
+const _cameraTarget = new THREE.Vector3(0, 1.5, 0);
+
+function FixedCamera() {
+  const { camera } = useThree();
+  useFrame(() => {
+    camera.position.set(0, 1.5, 2.5);
+    camera.lookAt(_cameraTarget);
+  });
+  return null;
+}
+
+function DragRotate({ groupRef }: { groupRef: React.RefObject<THREE.Group | null> }) {
+  const { gl } = useThree();
+  const dragging = useRef(false);
+  const prevX = useRef(0);
+
+  useEffect(() => {
+    const canvas = gl.domElement;
+    const onDown = (e: PointerEvent) => {
+      dragging.current = true;
+      prevX.current = e.clientX;
+      canvas.setPointerCapture(e.pointerId);
+    };
+    const onMove = (e: PointerEvent) => {
+      if (!dragging.current || !groupRef.current) return;
+      const dx = e.clientX - prevX.current;
+      groupRef.current.rotation.y += dx * 0.008;
+      prevX.current = e.clientX;
+    };
+    const onUp = (e: PointerEvent) => {
+      dragging.current = false;
+      canvas.releasePointerCapture(e.pointerId);
+    };
+    canvas.addEventListener("pointerdown", onDown);
+    canvas.addEventListener("pointermove", onMove);
+    canvas.addEventListener("pointerup", onUp);
+    canvas.addEventListener("pointercancel", onUp);
+    return () => {
+      canvas.removeEventListener("pointerdown", onDown);
+      canvas.removeEventListener("pointermove", onMove);
+      canvas.removeEventListener("pointerup", onUp);
+      canvas.removeEventListener("pointercancel", onUp);
+    };
+  }, [gl, groupRef]);
+
+  return null;
+}
+
 const Loader = () => (
   <Html center>
     <div className="text-xs text-muted-foreground bg-background/80 px-3 py-1.5 rounded-full backdrop-blur">
@@ -338,20 +402,17 @@ const Loader = () => (
 interface SignAvatarProps {
   pose?: HandPose;
   className?: string;
-  showControls?: boolean;
   compact?: boolean;
   avatarUrl?: string;
 }
 
 function useAvatarColors() {
   const [bg, setBg] = useState("#f8fafc");
-  const [fog, setFog] = useState("#f8fafc");
 
   useEffect(() => {
     const update = () => {
       const s = getComputedStyle(document.documentElement);
       setBg(s.getPropertyValue("--avatar-bg").trim() || "#f8fafc");
-      setFog(s.getPropertyValue("--avatar-fog").trim() || "#f8fafc");
     };
     update();
     const obs = new MutationObserver(update);
@@ -359,28 +420,27 @@ function useAvatarColors() {
     return () => obs.disconnect();
   }, []);
 
-  return { bg, fog };
+  return { bg };
 }
 
 export const SignAvatar = ({
   pose = REST_POSE,
   className = "",
-  showControls = false,
   compact = false,
   avatarUrl,
 }: SignAvatarProps) => {
   const url = avatarUrl?.trim() || DEFAULT_AVATAR_URL;
-  const { bg, fog } = useAvatarColors();
+  const { bg } = useAvatarColors();
+  const avatarGroupRef = useRef<THREE.Group>(null);
   return (
     <div className={`w-full h-full ${className}`}>
       <Canvas
         shadows
-        camera={{ position: [0, 0.2, 3.0], fov: 30 }}
+        camera={{ position: [0, 1.5, 2.5], fov: 35 }}
         dpr={[1, 2]}
-        gl={{ antialias: true }}
+        gl={{ antialias: true, localClippingEnabled: false }}
       >
         <color attach="background" args={[bg]} />
-        <fog attach="fog" args={[fog, 3, 8]} />
 
         <ambientLight intensity={0.6} />
         <directionalLight
@@ -393,23 +453,18 @@ export const SignAvatar = ({
         <directionalLight position={[0, -2, -4]} intensity={0.2} color="#ffeedd" />
         <hemisphereLight args={["#b1e1ff", "#b97a20", 0.3]} />
 
-        <AvatarErrorBoundary fallback={<StylizedAvatar pose={pose} />}>
-          <Suspense fallback={<Loader />}>
-            <ReadyPlayerMeAvatar pose={pose} url={url} />
-          </Suspense>
-        </AvatarErrorBoundary>
+        <group ref={avatarGroupRef}>
+          <AvatarErrorBoundary fallback={<StylizedAvatar pose={pose} />}>
+            <Suspense fallback={<Loader />}>
+              <ReadyPlayerMeAvatar pose={pose} url={url} />
+            </Suspense>
+          </AvatarErrorBoundary>
+        </group>
 
-        <ContactShadows position={[0, -0.7, 0]} opacity={0.35} scale={3} blur={2.4} />
+        <ContactShadows position={[0, 0, 0]} opacity={0.35} scale={3} blur={2.4} />
 
-        {showControls && (
-          <OrbitControls
-            enablePan={false}
-            enableZoom={false}
-            minPolarAngle={Math.PI / 2.6}
-            maxPolarAngle={Math.PI / 1.9}
-            target={[0, 0.2, 0]}
-          />
-        )}
+        <FixedCamera />
+        <DragRotate groupRef={avatarGroupRef} />
       </Canvas>
     </div>
   );

@@ -210,7 +210,7 @@ const ZehnTube = () => {
               : "flex flex-col gap-2 min-h-0"
             }>
               <div className={`rounded-2xl overflow-hidden flex-1 min-h-0 relative ${expanded ? "glass shadow-2xl border border-white/20" : "glass-card"}`}>
-                <SignAvatar pose={player.currentPose} avatarUrl={profile?.avatar_url || undefined} compact showControls />
+                <SignAvatar pose={player.currentPose} avatarUrl={profile?.avatar_url || undefined} compact />
                 <div className="absolute top-2 left-2 right-2 flex justify-between">
                   <div className="glass px-2.5 py-1 rounded-full text-xs font-medium">
                     {translating ? (
